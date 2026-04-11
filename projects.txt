@@ -1,0 +1,19 @@
+cal-poly-wellness-app
+Music & wellness mobile app (Cal Poly research)
+Stack: research + mobile; published NLP work; App Store & Google Play launch
+Highlights: healthy music-based coping strategies; 1st place IgniteCS Programming Expo; presented at Semantic & NLP conf.
+###
+cmu-refugee-storybooks
+Image editing & storybooks for refugee children (CMU AI research, Summer 2024)
+Stack: Azure VMs, image editing / generative models
+Fine-tuned models for culturally appropriate visuals; storybook translation reflecting diverse backgrounds.
+###
+yekola-multilingual-stt
+Multilingual speech-to-text (Yekola)
+Stack: Python, AWS Lambda & S3
+Fine-tuned STT across multiple African languages; backend architecture for data-scarce settings.
+###
+rivacoit-terminal-site
+This portfolio — terminal UI in the browser
+Stack: React, Vite
+Interactive shell: projects, experiences, and content loaded from plain text files.
