@@ -1,0 +1,17 @@
+ml-security-research
+ML Security Research
+Focus: adversarial robustness
+Tools: Python, PyTorch
+Description: exploring model vulnerabilities and defenses
+###
+network-anomaly-detector
+Network Anomaly Detector
+Focus: traffic analysis & anomaly scoring
+Tools: Python, scikit-learn
+Description: experiments on labeled network flows
+###
+this-website
+This website
+Focus: terminal UI, static deploy
+Tools: React, Vite
+Description: interactive portfolio shell

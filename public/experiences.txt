@@ -1,0 +1,14 @@
+stanford-cs
+Role: undergraduate, Computer Science
+Focus: systems, security coursework
+Notes: add dates, links, or highlights you care to show here
+###
+research-lab
+Role: research assistant
+Stack: Python, PyTorch
+Description: short summary of what you did and impact
+###
+teaching-cs106a
+Role: section leader / TA (example)
+Course: CS106A-style intro (adjust to your real course)
+Description: mentoring, grading, or workshop highlights

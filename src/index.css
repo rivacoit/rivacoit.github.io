@@ -1,3 +1,69 @@
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  text-align: left;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Terminal UI (App.jsx) */
+.terminal {
+  box-sizing: border-box;
+  flex: 1;
+  min-height: 100%;
+  padding: 1.5rem;
+  background: #0b0f14;
+  color: #d1d5db;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* 16px avoids iOS zoom-on-focus; keeps prompt + input aligned */
+  font-size: 16px;
+  line-height: 1.35;
+  cursor: text;
+}
+
+.terminal-line {
+  margin: 0 0 0.35em;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.terminal-input-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.1em;
+}
+
+.terminal-prompt {
+  flex-shrink: 0;
+  user-select: none;
+  color: #9ca3af;
+}
+
+.terminal-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  caret-color: #e5e7eb;
+}
+
+.terminal-input:focus {
+  outline: none;
+}
+
+.terminal-input::selection {
+  background: rgba(96, 165, 250, 0.35);
+}
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -52,18 +118,6 @@
 
 body {
   margin: 0;
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
 }
 
 h1,
