@@ -43,3 +43,15 @@ export async function fetchBlockCatalog(filename) {
   const text = await res.text();
   return parseBlockCatalog(text);
 }
+
+/** Raw file for a single home file (e.g. education.txt shown by cat education). */
+export async function fetchPlainTextFile(filename) {
+  const base = import.meta.env.BASE_URL ?? "/";
+  const root = base.endsWith("/") ? base : `${base}/`;
+  const url = `${root}${filename}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`${filename}: HTTP ${res.status}`);
+  }
+  return res.text();
+}

@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import { fetchBlockCatalog } from "./blockCatalog.js";
+import { fetchBlockCatalog, fetchPlainTextFile } from "./blockCatalog.js";
 
-const catalogLoadNotePosted = { projects: false, experiences: false };
+const catalogLoadNotePosted = { projects: false, experiences: false, education: false };
 
-const aboutOutput = () => `Victoria Yang — CS @ Stanford
-Interested in security, systems, and ML.
+const aboutOutput = () => `Victoria Yang — Stanford University
+Intended major: Computer Science (B.S., expected June 2029)
 
-I like building things that are both technically rigorous and thoughtfully designed.`;
+I work across security, systems, and ML — from collegiate cyber defense and
+infrastructure hardening to ML for drug discovery and multilingual speech tech.
+
+I like building things that are technically rigorous and thoughtfully designed.`;
 
 const HELP_TEXT = `Shell-style navigation:
   tab         autocomplete commands
@@ -20,12 +23,16 @@ Other:
   clear       clear the screen
   (there may be other commands to discover)
 
-Projects: public/projects.txt — Experiences: public/experiences.txt
-Same format: first line = filename under that folder, then body; use ### alone on a line between entries.`;
+Block files (first line = filename under folder, then body; ### between entries):
+  public/projects.txt → ~/projects
+  public/experiences.txt → ~/experiences
+
+Plain text file at ~:
+  public/education.txt → shown by: cat education`;
 
 const VFS_HOME = {
   dirs: ["projects", "experiences"],
-  files: ["about", "contact", "skills", "help"],
+  files: ["about", "contact", "skills", "education", "help"],
 };
 
 function vfsNode(cwd, catalogs) {
@@ -63,7 +70,10 @@ function lsOutput(cwd, catalogs) {
     return a.localeCompare(b);
   });
 
-  return entries.length ? entries.join("  ") : "";
+  if (!entries.length) {
+    return "(empty)";
+  }
+  return entries.join("\n");
 }
 
 function runCd(args, cwd) {
@@ -93,7 +103,7 @@ function runCd(args, cwd) {
   return { nextCwd: cwd, error: `cd: no such file or directory: ${target}` };
 }
 
-function runCat(args, cwd, catalogs) {
+function runCat(args, cwd, catalogs, educationText) {
   if (args.length === 0) {
     return "cat: missing file operand";
   }
@@ -118,14 +128,26 @@ function runCat(args, cwd, catalogs) {
   if (key === "") {
     if (name === "about") return aboutOutput();
     if (name === "contact") {
-      return `Email: your@email.com
-GitHub: github.com/yourname
-LinkedIn: linkedin.com/in/yourname`;
+      return `Victoria Yang
+Phone: (909) 729-7491
+Email: vicyang@stanford.edu`;
     }
     if (name === "skills") {
-      return `Languages: Python, JavaScript, C++
-Frameworks: React, Next.js
-Areas: Security, ML, Systems`;
+      return `Awards
+  • 1st place — Air & Space Force CyberPatriot Cisco Networking Challenge, CyberPatriot All-Service Division
+  • 1st place — IgniteCS Programming Expo, GameGala; Orange County Science & Engineering Fair (Behavioural Science)
+
+Programming: Python, Java, C++, Flutter/Dart
+
+ML / AI: TensorFlow, Hugging Face, scikit-learn, rake-nltk
+
+Cloud & infra: AWS (Lambda, S3), Firebase`;
+    }
+    if (name === "education") {
+      if (educationText === null) {
+        return "education.txt is still loading…";
+      }
+      return educationText;
     }
     if (name === "help") return HELP_TEXT;
   }
@@ -326,10 +348,12 @@ export default function App() {
   const [history, setHistory] = useState([
     { type: "output", text: "Initializing system..." },
     { type: "output", text: "Access granted." },
-    { type: "output", text: "Try ls, then cd projects or cd experiences." },
+    { type: "output", text: "Try ls, then cd projects or experiences. cat education for school info." },
   ]);
   const [cwd, setCwd] = useState([]);
   const [catalogs, setCatalogs] = useState(EMPTY_CATALOGS);
+  /** null = loading; string = loaded body or error placeholder */
+  const [educationText, setEducationText] = useState(null);
   const [input, setInput] = useState("");
   const inputRef = useRef(null);
   const bottomRef = useRef(null);
@@ -340,14 +364,32 @@ export default function App() {
       const results = await Promise.allSettled([
         fetchBlockCatalog("projects.txt"),
         fetchBlockCatalog("experiences.txt"),
+        fetchPlainTextFile("education.txt"),
       ]);
       if (cancelled) return;
 
-      const [pRes, eRes] = results;
+      const [pRes, eRes, edRes] = results;
       setCatalogs((prev) => ({
         projects: pRes.status === "fulfilled" ? pRes.value : prev.projects,
         experiences: eRes.status === "fulfilled" ? eRes.value : prev.experiences,
       }));
+
+      if (edRes.status === "fulfilled") {
+        const raw = edRes.value.trimEnd();
+        setEducationText(raw === "" ? "(no content yet — edit public/education.txt)" : raw);
+      } else {
+        setEducationText("(could not load education.txt)");
+        if (!catalogLoadNotePosted.education) {
+          catalogLoadNotePosted.education = true;
+          setHistory((prev) => [
+            ...prev,
+            {
+              type: "output",
+              text: "Could not load education.txt — cat education will show a placeholder until the file is available.",
+            },
+          ]);
+        }
+      }
 
       if (pRes.status === "rejected" && !catalogLoadNotePosted.projects) {
         catalogLoadNotePosted.projects = true;
@@ -427,7 +469,7 @@ export default function App() {
       nextCwd = result.nextCwd;
       output = result.error;
     } else if (name === "cat") {
-      output = runCat(args, cwd, catalogs);
+      output = runCat(args, cwd, catalogs, educationText);
     } else if (commands[trimmed]) {
       output = commands[trimmed]();
     } else {
