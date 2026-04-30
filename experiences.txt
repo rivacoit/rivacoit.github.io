@@ -1,39 +1,11 @@
-stanford-applied-cyber-ccdc
-Stanford Applied Cyber — Collegiate Cyber Defense Competition
-Role: Network Lead · Stanford, CA
-November 2025 – Present
-- Manage and protect simulated commercial infrastructure with scored services under active red-team engagement.
-- Implement firewall rules; configure and harden networking devices under time-constrained, high-pressure conditions.
+lorem-experience-one
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ###
-sail-dror-lab
-Stanford Artificial Intelligence Laboratory (SAIL), Dror Lab
-Role: Research Assistant · Stanford, CA
-October 2025 – March 2025
-- Optimize ML models for predicting ligand–protein binding using state-of-the-art methods.
-- Survey computational drug discovery to find promising directions and gaps in binding-affinity prediction.
+lorem-experience-two
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 ###
-cal-poly-research
-California State Polytechnic University, Pomona — Research & Software Engineering Intern
-Hybrid · June 2023 – August 2024
-  • Designed and launched a mobile app for healthy music-based coping strategies; live on the Apple App Store and Google Play.
-  • First-author research published & presented at 5th Intl. Conf. on Semantic & Natural Language Processing; 1st place, IgniteCS Programming Expo.
-###
-google-career-exploration
-Google — Career Exploration Intern · Hybrid (Irvine, CA)
-Summer 2024
-  • Built pitch decks, financial models, and one-pagers to support investment decisions.
-  • Researched market trends for strategic recommendations; presented marketing strategy to a Google Marketing member and incorporated feedback.
-###
-infinite-consulting
-Infinite Consulting Services — Technical Support & Engineering Intern · Remote
-June – November 2024
-  • Resolved support tickets across environments: remote troubleshooting, device configuration, and issue resolution.
-  • Expanded IT skills across networks, systems, and tools; communicated directly with clients.
-###
-deeptempo-netflow-security
-Deeptempo
-AI for threat detection, powered by a unique deep learning foundation model that spots attacker intent from flow logs.
-Role: Engineering Intern · Remote
-Feburary 2025 – Present
-- Manage and protect simulated commercial infrastructure with scored services under active red-team engagement.
-- Implement firewall rules; configure and harden networking devices under time-constrained, high-pressure conditions.
+lorem-experience-three
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.
+Deserunt mollit anim id est laborum.
