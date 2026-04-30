@@ -1,14 +1,6 @@
-Victoria Yang — Education
+Lorem ipsum education placeholder.
 
-Stanford University — Stanford, CA
-Intended major: Computer Science, B.S.
-Expected graduation: June 2029
+Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-MIT Beaver Works Summer Institute — Remote
-Rigorous cybersecurity immersion: IoT security through reverse engineering and related topics.
-July 2024
-
-Non-Trivial Fellowship — Remote
-172 fellows selected from 11,583 applicants.
-Cognitive science research on the impact of fiction on AI apathy.
-May 2024
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.
