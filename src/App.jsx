@@ -1,19 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchBlockCatalog, fetchPlainTextFile } from "./blockCatalog.js";
+import SpotlightCard from "./reactbits/SpotlightCard.jsx";
+import TiltCard from "./reactbits/TiltCard.jsx";
+import ClickSpark from "./reactbits/ClickSpark.jsx";
 
-const ABOUT_TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
+/* ------------------------------------------------------------------ */
+/* Content                                                            */
+/* ------------------------------------------------------------------ */
 
-const CONTACT_TEXT = `Lorem Ipsum
-Phone: +1 (000) 000-0000
-Email: lorem@example.com`;
+const ABOUT_TEXT = `Victoria Yang - CS @ Stanford (B.S., expected 2029).
+Curious about a lot: AI, AI safety, systems, security, and the occasional
+startup idea. Currently an ML intern at DeepTempo and Network Lead for
+Stanford's CCDC team. Past: Stanford AI Lab (Dror Lab), Carnegie Mellon,
+Google, and Cal Poly Pomona. Non-Trivial Fellow (172 of 11,583).`;
 
-const SKILLS_TEXT = `Lorem Skills
-- Lorem ipsum dolor sit amet
-- Consectetur adipiscing elit
+const CONTACT_TEXT = `Victoria Yang
+Email:    victoriayang425@gmail.com
+Stanford: vicyang@stanford.edu
+Phone:    (909) 729-7491
+GitHub:   github.com/rivacoit`;
 
-Tools: Lorem, Ipsum, Dolor
-Cloud: Sit, Amet`;
+const SKILLS_TEXT = `Languages & ML
+- Python, PyTorch, scikit-learn, XGBoost
+- Transformers, Graph Neural Networks, NLP, LLMs
+
+Frameworks & Tools
+- Next.js, React, Supabase, Vertex AI, Azure, Git
+
+Security
+- Network defense, firewalls, intrusion detection
+- Reverse engineering, IoT security, defense-in-depth`;
 
 const HELP_TEXT = `Shell-style navigation:
   tab         autocomplete commands
@@ -27,21 +43,155 @@ Other:
   clear       clear the screen
   whoami      easter egg`;
 
-const BLOG_POSTS = [
+const NAV_LINKS = [
+  { href: "#education", label: "education" },
+  { href: "#experience", label: "experience" },
+  { href: "#projects", label: "work" },
+  { href: "#skills", label: "toolkit" },
+  { href: "#contact", label: "contact" },
+];
+
+const EDUCATION = {
+  org: "Stanford University",
+  detail: "B.S. in Computer Science (intended) · Expected Jun 2029",
+  gpa: "4.10 / 4.30",
+  note: "Selected coursework:",
+  courses: [
+    { id: "CS 229", name: "Machine Learning" },
+    { id: "CS 152", name: "Trust & Safety" },
+    { id: "CS 109", name: "Probability for Computer Scientists" },
+    { id: "CS 107", name: "Computer Organization & Systems" },
+    { id: "CS 106B", name: "Programming Abstractions" },
+    { id: "CS 103", name: "Mathematical Foundations of Computing" },
+    { id: "MATH 51", name: "Linear Algebra & Multivariable Calculus" },
+    { id: "MATH 104", name: "Applied Matrix Theory" },
+  ],
+};
+
+const EXPERIENCES = [
   {
-    title: "Lorem ipsum article one",
-    summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.",
-    tag: "Lorem",
+    org: "DeepTempo",
+    role: "Machine Learning Intern",
+    date: "Feb 2026 - Present",
+    place: "Hybrid · Stanford, CA",
+    bullets: [
+      "Build and validate end-to-end ML pipelines for network intrusion detection, engineering features and evaluating models on high-dimensional NetFlow data.",
+      "Generate synthetic enterprise network traffic via statistical distribution fitting to train and stress-test anomaly-detection models against realistic attack patterns.",
+    ],
   },
   {
-    title: "Lorem ipsum article two",
-    summary: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-    tag: "Ipsum",
+    org: "Stanford Applied Cyber (CCDC)",
+    role: "Network Lead",
+    date: "Nov 2025 - Present",
+    place: "Western Regional Champion · 7th Nationally",
+    bullets: [
+      "Lead network defense for Stanford's competition team — configuring firewalls, hardening devices, and keeping scored services online under live red-team attack.",
+      "Apply defense-in-depth across enterprise-style environments, balancing security against usability to win the Western Regional title and place 7th nationally.",
+    ],
   },
   {
-    title: "Lorem ipsum article three",
-    summary: "Duis aute irure dolor in reprehenderit in voluptate velit esse.",
-    tag: "Dolor",
+    org: "Socket",
+    role: "Machine Learning Intern (incoming)",
+    date: "Jun - Sep 2026",
+    place: "Remote",
+    bullets: [
+      "Incoming ML intern on an open-source supply-chain security platform, working on malicious-package detection across the npm/PyPI ecosystem.",
+    ],
+  },
+  {
+    org: "Stanford AI Lab (SAIL) · Dror Lab",
+    role: "Research Assistant",
+    date: "Oct 2025 - Mar 2026",
+    place: "Stanford, CA",
+    bullets: [
+      "Integrated state-of-the-art ML into ligand–protein binding-affinity prediction pipelines for computational drug discovery.",
+      "Surveyed recent ML-for-drug-discovery literature to identify research gaps and the most promising directions for the lab.",
+    ],
+  },
+  {
+    org: "Carnegie Mellon University",
+    role: "AI Research Intern",
+    date: "Summer 2024",
+    place: "Remote",
+    bullets: [
+      "Implemented and fine-tuned image-editing models on Azure GPU VMs to support culturally appropriate visual storytelling.",
+    ],
+  },
+  {
+    org: "Google",
+    role: "Career Exploration Intern",
+    date: "Summer 2024",
+    place: "Hybrid · Irvine, CA",
+    bullets: [
+      "Built pitch decks, financial models, and one-pagers, and researched market trends to inform strategic recommendations.",
+    ],
+  },
+  {
+    org: "MIT Beaver Works Summer Institute",
+    role: "Cybersecurity Program",
+    date: "Jul 2024",
+    place: "Remote",
+    bullets: [
+      "Completed an intensive cybersecurity immersion covering IoT security, reverse engineering, and offensive/defensive techniques.",
+    ],
+  },
+  {
+    org: "Non-Trivial Fellowship",
+    role: "Research Fellow",
+    date: "May 2024",
+    place: "Remote · 1 of 172 from 11,583 applicants",
+    bullets: [
+      "Selected as 1 of 172 fellows from 11,583 applicants; conducted cognitive-science research on how fiction shapes attitudes toward AI risk.",
+    ],
+  },
+  {
+    org: "Cal Poly Pomona",
+    role: "Research & Software Engineering Intern",
+    date: "Jun 2023 - Aug 2024",
+    place: "Hybrid",
+    bullets: [
+      "First-author publication and presentation at the 5th Intl. Conference on Semantic & Natural Language Processing; first place at IgniteCS, GameGala, and the OC Science & Engineering Fair.",
+      "Designed and launched an ML-based music-therapy app, shipped live on the Apple App Store and Google Play.",
+    ],
+  },
+];
+
+const PROJECTS = [
+  {
+    title: "EvolveGCN-T: Self-Attention for Weight Evolution in Dynamic Graphs",
+    course: "CS229 Machine Learning · Stanford",
+    bullets: [
+      "Proposed and implemented EvolveGCN-T, a novel dynamic graph neural network that replaces EvolveGCN's GRU weight recurrence with a causally-masked Transformer attending directly over the history of GCN weight matrices — a pathway prior work hadn't explored.",
+      "Built the full PyTorch training & logging pipeline (Weights & Biases) and ran every experiment across three benchmarks (Elliptic, Bitcoin-OTC, SBM); in an architecture-matched head-to-head, the Transformer lifted Bitcoin-OTC edge-classification micro-F1 from 0.699 → 0.783.",
+      "Reproduced published EvolveGCN baselines (Elliptic illicit-class F1 0.578, SBM MAP 0.194) to validate correctness, then isolated optimization stability — not context length — as the dominant performance factor.",
+    ],
+    tags: ["PyTorch", "Transformers", "Graph NNs", "Weights & Biases"],
+    links: [{ label: "Read the report", href: "/cs229-report.pdf" }],
+  },
+  {
+    title: "Hybrid Fraud Detection for Fake Job Postings",
+    course: "CS152 Trust & Safety · Stanford",
+    bullets: [
+      "Built a production hybrid rule-based + LLM (Gemini 2.5 Flash) classifier with a moderator-feedback loop that auto-injects resolved cases as few-shot examples — reaching F1 0.913 and 0.95 fraud recall at 4.5× lower inference cost than a pure-LLM baseline.",
+      "Owned ML and backend for a 5-person team: shipped on a Next.js / Supabase / Vertex AI stack with fail-closed routing, and built a three-approach offline eval harness (TF-IDF + LR, LLM, hybrid) to benchmark accuracy against cost.",
+    ],
+    tags: ["LLMs", "Next.js", "Supabase", "Vertex AI"],
+    links: [{ label: "GitHub", href: "https://github.com/stanfordcs152/sp26-team-19" }],
+  },
+];
+
+const SKILL_GROUPS = [
+  {
+    title: "Languages & ML",
+    items: ["Python", "PyTorch", "scikit-learn", "XGBoost", "Transformers", "Graph Neural Networks", "NLP", "LLMs"],
+  },
+  {
+    title: "Frameworks & Tools",
+    items: ["Next.js", "React", "Supabase", "Vertex AI", "Azure", "Git"],
+  },
+  {
+    title: "Security",
+    items: ["Network Defense", "Firewalls", "Intrusion Detection", "Reverse Engineering", "IoT Security", "Defense-in-Depth"],
   },
 ];
 
@@ -55,129 +205,322 @@ const VFS_HOME = {
   files: ["about", "contact", "skills", "education", "help"],
 };
 
+/* ------------------------------------------------------------------ */
+/* Scroll reveal                                                      */
+/* ------------------------------------------------------------------ */
+
+function Reveal({ children, className = "", delay = 0 }) {
+  const ref = useRef(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShown(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
+    );
+    observer.observe(el);
+    // Safety net: never leave content hidden if the observer doesn't fire.
+    const fallback = setTimeout(() => setShown(true), 2500);
+    return () => {
+      observer.disconnect();
+      clearTimeout(fallback);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={`reveal ${shown ? "reveal-in" : ""} ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function SectionHead({ title, sub }) {
+  return (
+    <Reveal>
+      <div className="section-head">
+        <h2>{title}</h2>
+        {sub && <p>{sub}</p>}
+      </div>
+    </Reveal>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Home page                                                          */
+/* ------------------------------------------------------------------ */
+
+function HomePage({ onEnterTerminal }) {
+  const [activeSection, setActiveSection] = useState("");
+  const [showTop, setShowTop] = useState(false);
+
+  useEffect(() => {
+    const ids = NAV_LINKS.map((l) => l.href.slice(1));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActiveSection(e.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    const onScroll = () => setShowTop(window.scrollY > 700);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  return (
+    <ClickSpark sparkColor="#c98aa0" sparkSize={9} sparkRadius={16} sparkCount={8} duration={520}>
+      <div className="page">
+        <div className="cozy-bg" aria-hidden="true">
+          <span className="blob blob-1" />
+          <span className="blob blob-2" />
+        </div>
+
+        <main className="home">
+          <header className="home-nav">
+            <a className="brand" href="#top">
+              Victoria Yang
+            </a>
+            <nav>
+              {NAV_LINKS.map((l) => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  className={activeSection === l.href.slice(1) ? "is-current" : ""}
+                >
+                  {l.label}
+                </a>
+              ))}
+              <button className="nav-terminal" onClick={onEnterTerminal}>
+                <span className="nav-terminal-glyph">{">_"}</span> terminal
+              </button>
+            </nav>
+          </header>
+
+          <section id="top" className="home-hero">
+            <div className="home-hero-layout">
+              <div className="profile-wrap">
+                <figure className="polaroid">
+                  <img
+                    className="profile-photo"
+                    src="/profile.webp"
+                    alt="Victoria Yang"
+                    onError={(e) => {
+                      e.currentTarget.closest(".profile-wrap").style.display = "none";
+                    }}
+                  />
+                  <figcaption className="polaroid-caption">me @ mt. tam</figcaption>
+                </figure>
+              </div>
+              <div>
+                <p className="hero-hi">hi, i&apos;m</p>
+                <h1 className="hero-name">Victoria</h1>
+                <p className="hero-tagline">
+                  A Stanford CS student building (and breaking) things across AI,
+                  systems, and security.
+                </p>
+                <div className="currently">
+                  <span className="currently-dot" />
+                  currently — ML intern @ <strong>DeepTempo</strong> &amp; network
+                  lead @ <strong>Stanford CCDC</strong>
+                </div>
+                <div className="home-actions">
+                  <a className="button-primary" href="/resume.pdf" target="_blank" rel="noreferrer">
+                    Résumé
+                  </a>
+                  <a className="button-secondary" href="mailto:victoriayang425@gmail.com">
+                    Email
+                  </a>
+                  <a className="button-secondary" href="https://github.com/rivacoit" target="_blank" rel="noreferrer">
+                    GitHub
+                  </a>
+                  <a className="button-secondary" href="https://www.linkedin.com/in/yuqi-yang-96953b330/" target="_blank" rel="noreferrer">
+                    LinkedIn
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="education" className="home-section">
+            <SectionHead title="Education" />
+            <Reveal>
+              <div className="edu-item edu-feature">
+                <div className="edu-head">
+                  <div>
+                    <h3>{EDUCATION.org}</h3>
+                    <p className="edu-detail">{EDUCATION.detail}</p>
+                  </div>
+                  <span className="edu-gpa">
+                    GPA <strong>{EDUCATION.gpa}</strong>
+                  </span>
+                </div>
+                <p className="edu-note">{EDUCATION.note}</p>
+                <div className="course-list">
+                  {EDUCATION.courses.map((c) => (
+                    <span key={c.id} className="course-chip">
+                      <span className="course-id">{c.id}</span> {c.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          </section>
+
+          <section id="experience" className="home-section">
+            <SectionHead title="Experience" sub="where i've been building & researching" />
+            <div className="card-grid">
+              {EXPERIENCES.map((e, i) => (
+                <Reveal key={e.org} delay={(i % 2) * 70}>
+                  <TiltCard className="exp-card">
+                    <div className="exp-top">
+                      <h3>{e.org}</h3>
+                      <span className="exp-date">{e.date}</span>
+                    </div>
+                    <p className="exp-role">{e.role}</p>
+                    <p className="exp-place">{e.place}</p>
+                    <ul className="exp-bullets">
+                      {e.bullets.map((b, j) => (
+                        <li key={j}>{b}</li>
+                      ))}
+                    </ul>
+                  </TiltCard>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+
+          <section id="projects" className="home-section">
+            <SectionHead title="Selected work" sub="ml & trust-and-safety projects" />
+            <div className="project-grid">
+              {PROJECTS.map((p, i) => (
+                <Reveal key={p.title} delay={i * 90}>
+                  <TiltCard className="project-card" max={4}>
+                    <p className="project-course">{p.course}</p>
+                    <h3>{p.title}</h3>
+                    <ul>
+                      {p.bullets.map((b, j) => (
+                        <li key={j}>{b}</li>
+                      ))}
+                    </ul>
+                    <div className="tag-row">
+                      {p.tags.map((t) => (
+                        <span key={t}>{t}</span>
+                      ))}
+                    </div>
+                    {p.links && (
+                      <div className="project-links">
+                        {p.links.map((l) => (
+                          <a
+                            key={l.href}
+                            href={l.href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="project-link"
+                          >
+                            {l.label} <span aria-hidden="true">→</span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </TiltCard>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+
+          <section id="skills" className="home-section">
+          <SectionHead title="Toolkit" />
+          <div className="skills-grid">
+            {SKILL_GROUPS.map((g, i) => (
+              <Reveal key={g.title} delay={i * 80}>
+                <div className="skill-group">
+                  <h4>{g.title}</h4>
+                  <div className="pill-list">
+                    {g.items.map((it) => (
+                      <span key={it}>{it}</span>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        <section id="contact" className="home-section contact-section">
+          <Reveal>
+            <SpotlightCard className="contact-card" spotlightColor="rgba(201, 138, 160, 0.16)">
+              <h2>Let&apos;s connect</h2>
+              <p>
+                I&apos;m looking for internships and research collaborations across
+                AI, systems, and security. Email is the best way to reach me.
+              </p>
+              <div className="home-actions">
+                <a className="button-primary" href="mailto:victoriayang425@gmail.com">
+                  victoriayang425@gmail.com
+                </a>
+                <a className="button-secondary" href="/resume.pdf" target="_blank" rel="noreferrer">
+                  Résumé
+                </a>
+                <a className="button-secondary" href="https://github.com/rivacoit" target="_blank" rel="noreferrer">
+                  GitHub
+                </a>
+                <a className="button-secondary" href="https://www.linkedin.com/in/yuqi-yang-96953b330/" target="_blank" rel="noreferrer">
+                  LinkedIn
+                </a>
+              </div>
+            </SpotlightCard>
+          </Reveal>
+          <footer className="home-footer">
+            <span>© 2026 Victoria Yang</span>
+            <button className="footer-terminal" onClick={onEnterTerminal}>
+              terminal mode →
+            </button>
+          </footer>
+        </section>
+        </main>
+
+        <button
+          className={`to-top ${showTop ? "is-visible" : ""}`}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Back to top"
+        >
+          ↑
+        </button>
+      </div>
+    </ClickSpark>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Terminal mode                                                      */
+/* ------------------------------------------------------------------ */
+
 function vfsNode(cwd, catalogs) {
   const key = cwd.join("/");
   if (key === "") return VFS_HOME;
   if (key === "projects") return { dirs: [], files: catalogs.projects.slugs };
   if (key === "experiences") return { dirs: [], files: catalogs.experiences.slugs };
   return null;
-}
-
-function HomePage({ onEnterTerminal }) {
-  return (
-    <main className="home">
-      <header className="home-nav">
-        <p className="brand">Lorem Ipsum</p>
-        <nav>
-          <a href="#experience">Experience</a>
-          <a href="#skills">Skills</a>
-          <a href="#blog">Blog</a>
-          <a href="mailto:lorem@example.com">Contact</a>
-        </nav>
-      </header>
-
-      <section className="home-hero home-panel fade-up">
-        <div className="home-hero-layout">
-          <div>
-            <p className="home-kicker">Lorem Ipsum</p>
-            <h1>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h1>
-            <p className="home-lead">
-              Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco
-              laboris.
-            </p>
-            <div className="home-actions">
-              <a className="button-primary" href="mailto:lorem@example.com">
-                Contact
-              </a>
-              <a
-                className="button-secondary"
-                href="/resume.pdf"
-                target="_blank"
-                rel="noreferrer"
-              >
-                View resume PDF
-              </a>
-              <button className="button-secondary" onClick={onEnterTerminal}>
-                Open technical terminal view
-              </button>
-            </div>
-          </div>
-          <div className="profile-wrap">
-            <img
-              className="profile-photo"
-              src="/profile.webp"
-              alt="Profile"
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-            />
-          </div>
-        </div>
-        <div className="stats-grid">
-          <article className="stat-card">
-            <h3>7+</h3>
-            <p>Lorem ipsum dolor sit amet</p>
-          </article>
-          <article className="stat-card">
-            <h3>1st Place</h3>
-            <p>Consectetur adipiscing elit</p>
-          </article>
-          <article className="stat-card">
-            <h3>172 / 11,583</h3>
-            <p>Sed do eiusmod tempor</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="experience" className="home-panel fade-up">
-        <h2>Experience Highlights</h2>
-        <div className="home-grid">
-          <article className="home-card">
-            <h3>Lorem Experience One</h3>
-            <p className="meta">Role · Date</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </article>
-          <article className="home-card">
-            <h3>Lorem Experience Two</h3>
-            <p className="meta">Role · Date</p>
-            <p>Sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-          </article>
-          <article className="home-card">
-            <h3>Lorem Experience Three</h3>
-            <p className="meta">Role · Date</p>
-            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="skills" className="home-panel fade-up">
-        <h2>Skills</h2>
-        <div className="pill-list">
-          <span>Lorem</span><span>Ipsum</span><span>Dolor</span><span>Sit</span>
-          <span>Amet</span><span>Consectetur</span><span>Adipiscing</span>
-          <span>Elit</span><span>Sed</span><span>Eiusmod</span>
-        </div>
-      </section>
-
-      <section id="blog" className="home-panel fade-up">
-        <div className="section-head">
-          <h2>Blog</h2>
-          <p>Lorem ipsum placeholder posts.</p>
-        </div>
-        <div className="blog-grid">
-          {BLOG_POSTS.map((post) => (
-            <article key={post.title} className="blog-card">
-              <p className="meta">{post.tag}</p>
-              <h3>{post.title}</h3>
-              <p>{post.summary}</p>
-              <a href="#" aria-disabled="true">Coming soon</a>
-            </article>
-          ))}
-        </div>
-      </section>
-    </main>
-  );
 }
 
 function formatPromptPath(cwd) {
@@ -257,7 +600,7 @@ function tabComplete(input, cwd, catalogs) {
 
 function TerminalShell({ onExit }) {
   const [history, setHistory] = useState([
-    { type: "output", text: "Terminal mode loaded. Type help." },
+    { type: "output", text: "rivacoit shell — type 'help' to get started, 'ls' to look around." },
   ]);
   const [cwd, setCwd] = useState([]);
   const [catalogs, setCatalogs] = useState(EMPTY_CATALOGS);
@@ -339,19 +682,19 @@ function TerminalShell({ onExit }) {
     <div className="terminal-wrap">
       <div className="terminal-toolbar">
         <button className="button-secondary" onClick={onExit}>
-          Back to website
+          ← back to the site
         </button>
       </div>
       <div className="terminal" onClick={() => inputRef.current?.focus()}>
         {history.map((line, i) => (
           <pre key={i} className="terminal-line">
             {line.type === "input"
-              ? `visitor@lorem:${line.path ?? "~"}$ ${line.text}`
+              ? `visitor@rivacoit:${line.path ?? "~"}$ ${line.text}`
               : line.text}
           </pre>
         ))}
         <div className="terminal-input-row">
-          <span className="terminal-prompt">visitor@lorem:{formatPromptPath(cwd)}$</span>
+          <span className="terminal-prompt">visitor@rivacoit:{formatPromptPath(cwd)}$</span>
           <input
             ref={inputRef}
             className="terminal-input"

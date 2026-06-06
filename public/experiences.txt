@@ -1,11 +1,63 @@
-lorem-experience-one
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+deeptempo
+DeepTempo — Machine Learning Intern (Feb 2026 - Present)
+Hybrid · Stanford, CA
+- Build and validate ML pipelines for network intrusion detection with
+  feature engineering and evaluation on high-dimensional flow data.
+- Generate synthetic NetFlow data reflecting enterprise traffic for
+  anomaly-detection models via statistical distribution fitting.
 ###
-lorem-experience-two
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+socket
+Socket — Machine Learning Intern, incoming (Jun - Sep 2026)
+Remote
+- Incoming at an open-source supply-chain security platform focused on
+  malicious package detection.
 ###
-lorem-experience-three
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.
-Deserunt mollit anim id est laborum.
+stanford-applied-cyber
+Stanford Applied Cyber (CCDC) — Network Lead (Nov 2025 - Present)
+Western Regional Champion · 7th Nationally · Stanford, CA
+- Defend live infrastructure against active red-team attacks: configure
+  firewalls, harden network devices, and maintain scored service uptime
+  under pressure.
+- Apply defense-in-depth across environments simulating real corporations,
+  balancing tradeoffs between security and accessibility.
+###
+sail-dror-lab
+Stanford AI Laboratory (SAIL), Dror Lab — Research Assistant (Oct 2025 - Mar 2026)
+Stanford, CA
+- Integrated state-of-the-art ML methods into ligand-protein binding
+  affinity prediction pipelines for computational drug discovery.
+- Reviewed recent literature in ML-driven drug discovery to identify
+  research gaps and promising directions.
+###
+mit-bwsi
+MIT Beaver Works Summer Institute — Cybersecurity Program (Jul 2024)
+Remote
+- Rigorous cybersecurity immersion: IoT security, reverse engineering,
+  and offensive/defensive techniques.
+###
+non-trivial
+Non-Trivial Fellowship — Research Fellow (May 2024)
+Remote · 1 of 172 fellows from 11,583 applicants
+- Conducted cognitive-science research on the impact of fiction on
+  AI apathy.
+###
+cal-poly-pomona
+Cal Poly Pomona — Research & Software Engineering Intern (Jun 2023 - Aug 2024)
+Hybrid
+- Published & presented (first author) at the 5th International Conference
+  on Semantic & Natural Language Processing; awarded first place at IgniteCS
+  Programming Expo, GameGala, and the Orange County Science & Engineering Fair.
+- Designed and launched an ML-based music therapy intervention app, live on
+  the Apple App Store and Google Play.
+###
+carnegie-mellon
+Carnegie Mellon University — AI Research Intern (Summer 2024)
+Remote
+- Implemented and fine-tuned image-editing models on Azure VMs to support
+  culturally appropriate visual storytelling.
+###
+google
+Google — Career Exploration Intern (Summer 2024)
+Hybrid · Irvine, CA
+- Developed pitch decks, financial models, and one-pagers; researched
+  market trends to guide strategic recommendations.

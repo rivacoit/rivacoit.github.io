@@ -1,6 +1,6 @@
 {
   "name": "rivacoit",
-  "homepage": "https://rivacoit.github.io/website/",
+  "homepage": "https://rivacoit.github.io/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,6 +12,8 @@
     "deploy": "vite build && gh-pages -d dist"
   },
   "dependencies": {
+    "motion": "^12.40.0",
+    "ogl": "^1.0.11",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
