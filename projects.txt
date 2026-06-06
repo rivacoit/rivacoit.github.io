@@ -1,11 +1,19 @@
-lorem-project-one
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+bitcoin-fraud-detection
+Transformer-Based Temporal Aggregation for Illicit Bitcoin Transaction
+Detection — CS229 Machine Learning, Stanford
+- Replaced EvolveGCN's recurrent weight evolution with a causally-masked
+  Transformer encoder to capture long-range temporal dependencies in
+  dynamic Bitcoin transaction graphs.
+- Designed a leakage-free evaluation protocol exposing inflated baselines
+  in prior work; reproduced EvolveGCN-O and ran feature-only baselines
+  (XGBoost, Logistic Regression) on the Elliptic dataset.
 ###
-lorem-project-two
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
-###
-lorem-project-three
-Excepteur sint occaecat cupidatat non proident.
-Sunt in culpa qui officia deserunt mollit anim id est laborum.
+fake-job-detection
+Hybrid Fraud Detection for Fake Job Postings — CS152 Trust & Safety, Stanford
+- Designed a hybrid rule-based + LLM (Gemini 2.5 Flash) classifier with a
+  moderator-feedback loop that auto-injects closed decisions as in-prompt
+  few-shot examples; F1 0.913 / 0.95 fraud recall / 4.5x lower cost than
+  pure-LLM on a 200-example balanced eval.
+- Owned ML and backend integration on a 5-person team; shipped the
+  production classifier on a Next.js / Supabase / Vertex AI stack with
+  fail-closed routing and a three-approach offline evaluation harness.

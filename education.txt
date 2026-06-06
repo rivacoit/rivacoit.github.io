@@ -1,6 +1,5 @@
-Lorem ipsum education placeholder.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.
+Stanford University — Stanford, CA
+B.S. in Computer Science (intended) · Expected June 2029
+Relevant coursework: Machine Learning, Trust & Safety, Programming
+Abstractions, Computer Organization & Systems, Mathematical Foundations
+of Computing, Applied Matrix Theory, Linear Algebra, Multivariable Calculus.
