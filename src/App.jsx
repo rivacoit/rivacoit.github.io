@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { fetchBlockCatalog, fetchPlainTextFile } from "./blockCatalog.js";
 import SpotlightCard from "./reactbits/SpotlightCard.jsx";
 import TiltCard from "./reactbits/TiltCard.jsx";
@@ -245,6 +246,180 @@ function Reveal({ children, className = "", delay = 0 }) {
   );
 }
 
+// A little white cat with a pink collar, drawn so it can be recolored + run.
+// Pixel-art cat (VS Code Pets vibe): black-outlined white kitty with a curled tail.
+const CAT_COLORS = { o: "#1c1c1c", w: "#ffffff", g: "#8f8f93" };
+const CAT_W = 16;
+const CAT_BASE = [
+  "....o......o.....",
+  "...ooo....ooo....",
+  "...ogo....ogo....",
+  "..ogggo..ogggo...",
+  ".ooggggooggggo...",
+  ".owwwwwwwwwwwoooo",
+  ".owwwwwwwwwwwo..o",
+  ".owwwwwwwwwwwoooo",
+  ".owwowwowwwwwo...",
+  ".owwowwowwwwwo...",
+  ".owwowwowwwwwo...",
+  ".owwwwwwwwwwwwo..",
+  ".oowwwwwwwwwwoo..",
+];
+const CAT_FRAME_A = [...CAT_BASE, "..ooo.ooo.ooo..."];
+const CAT_FRAME_B = [...CAT_BASE, "...ooo.ooo.ooo.."];
+
+function catPixels(rows, S) {
+  const out = [];
+  for (let y = 0; y < rows.length; y++) {
+    const row = rows[y] || "";
+    for (let x = 0; x < row.length; x++) {
+      const col = CAT_COLORS[row[x]];
+      if (col) out.push(<rect key={`${x},${y}`} x={x * S} y={y * S} width={S} height={S} fill={col} />);
+    }
+  }
+  return out;
+}
+
+function CatSprite() {
+  const S = 4;
+  const W = CAT_W * S;
+  const H = 14 * S;
+  const svgProps = { width: W, height: H, viewBox: `0 0 ${W} ${H}`, shapeRendering: "crispEdges" };
+  return (
+    <span className="cat-sprite">
+      <svg className="cat-frame cat-a" {...svgProps}>{catPixels(CAT_FRAME_A, S)}</svg>
+      <svg className="cat-frame cat-b" {...svgProps}>{catPixels(CAT_FRAME_B, S)}</svg>
+    </span>
+  );
+}
+
+// Easter egg: the pink "currently" dot is a ball — click it and a cat fetches it,
+// carries it back, and tosses it home into the dot.
+function CatFetch() {
+  const [active, setActive] = useState(false);
+  const [dotEmpty, setDotEmpty] = useState(false);
+  const dotRef = useRef(null);
+  const ballRef = useRef(null);
+  const catRef = useRef(null);
+
+  const play = () => {
+    if (active) return;
+    setActive(true);
+    setDotEmpty(true);
+  };
+
+  useEffect(() => {
+    if (!active) return;
+    const dot = dotRef.current;
+    if (!dot) return;
+    const rect = dot.getBoundingClientRect();
+    const sx = rect.left + rect.width / 2;
+    const sy = rect.top + rect.height / 2;
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const groundY = H - 24;
+    const landX = Math.min(sx + W * (0.3 + (Date.now() % 15) / 100), W - 70);
+    const catOff = -80;
+    const HALF = 32; // half the sprite width
+
+    const T_DROP = 800; // ball falls from the dot to the ground
+    const T_IN = 1500; // cat runs in and reaches the ball
+    const T_CARRY = 2350; // cat carries it back under the dot
+    const T_TOSS = 2950; // cat tosses it home into the dot
+    const T_EXIT = 3550; // cat trots off
+    const start = performance.now();
+    let raf = 0;
+    let cleared = false;
+
+    const tick = (now) => {
+      const t = now - start;
+      const ball = ballRef.current;
+      const cat = catRef.current;
+
+      // cat
+      let cx;
+      let faceLeft = true;
+      let dy = 0;
+      if (t <= T_IN) {
+        const p = 1 - (1 - t / T_IN) ** 2;
+        cx = catOff + (landX - catOff) * p;
+        faceLeft = false;
+      } else if (t <= T_CARRY) {
+        const p = (t - T_IN) / (T_CARRY - T_IN);
+        cx = landX + (sx - landX) * p;
+      } else if (t <= T_TOSS) {
+        cx = sx;
+        const p = (t - T_CARRY) / (T_TOSS - T_CARRY);
+        dy = -Math.sin(Math.min(1, p * 1.5) * Math.PI) * 18; // crouch + pop
+      } else {
+        const p = Math.min(1, (t - T_TOSS) / (T_EXIT - T_TOSS)) ** 2;
+        cx = sx + (catOff - sx) * p;
+      }
+      if (cat) cat.style.transform = `translate(${cx - HALF}px, ${dy}px) scaleX(${faceLeft ? 1 : -1})`;
+
+      // ball
+      if (ball) {
+        if (t <= T_DROP) {
+          const p = t / T_DROP;
+          const x = sx + (landX - sx) * p;
+          const y = sy + (groundY - sy) * p + Math.sin(p * Math.PI) * -34;
+          ball.style.transform = `translate(${x}px, ${y}px) rotate(${p * 540}deg)`;
+        } else if (t <= T_IN) {
+          ball.style.transform = `translate(${landX}px, ${groundY}px) rotate(540deg)`;
+        } else if (t <= T_CARRY) {
+          const p = (t - T_IN) / (T_CARRY - T_IN);
+          ball.style.transform = `translate(${landX + (sx - landX) * p - 13}px, ${groundY - 8}px) rotate(${540 + p * 360}deg)`;
+        } else if (t <= T_TOSS) {
+          const p = (t - T_CARRY) / (T_TOSS - T_CARRY);
+          const y = groundY - 8 + (sy - (groundY - 8)) * p - Math.sin(p * Math.PI) * 28;
+          ball.style.transform = `translate(${sx}px, ${y}px) rotate(${540 + p * 360}deg)`;
+        } else {
+          ball.style.opacity = "0";
+        }
+      }
+
+      if (!cleared && t >= T_TOSS - 70) {
+        cleared = true;
+        setDotEmpty(false);
+      }
+      if (t < T_EXIT) raf = requestAnimationFrame(tick);
+      else setActive(false);
+    };
+
+    raf = requestAnimationFrame(tick);
+    // Safety net: always restore the dot + end the run even if rAF is throttled.
+    const safety = setTimeout(() => {
+      setDotEmpty(false);
+      setActive(false);
+    }, T_EXIT + 500);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(safety);
+    };
+  }, [active]);
+
+  return (
+    <>
+      <button
+        ref={dotRef}
+        className={`currently-dot ${dotEmpty ? "is-empty" : ""}`}
+        onClick={play}
+        aria-label="say hi to the cat"
+      />
+      {active &&
+        createPortal(
+          <div className="cat-stage" aria-hidden="true">
+            <span ref={ballRef} className="cat-ball" style={{ transform: "translate(-100px, -100px)" }} />
+            <span ref={catRef} className="cat-runner" style={{ transform: "translate(-120px, 0) scaleX(-1)" }}>
+              <CatSprite />
+            </span>
+          </div>,
+          document.body,
+        )}
+    </>
+  );
+}
+
 function SectionHead({ title, sub }) {
   return (
     <Reveal>
@@ -339,13 +514,15 @@ function HomePage({ onEnterTerminal }) {
                   systems, and security.
                 </p>
                 <div className="currently">
-                  <span className="currently-dot" />
-                  currently — ML intern @ <strong>DeepTempo</strong> &amp; network
-                  lead @ <strong>Stanford CCDC</strong>
+                  <CatFetch />
+                  currently — ML intern @{" "}
+                  <a className="currently-link" href="#experience">DeepTempo</a> &amp;
+                  network lead @{" "}
+                  <a className="currently-link" href="#experience">Stanford CCDC</a>
                 </div>
                 <div className="home-actions">
                   <a className="button-primary" href="/resume.pdf" target="_blank" rel="noreferrer">
-                    Résumé
+                    Resume
                   </a>
                   <a className="button-secondary" href="mailto:victoriayang425@gmail.com">
                     Email
@@ -479,7 +656,7 @@ function HomePage({ onEnterTerminal }) {
                   victoriayang425@gmail.com
                 </a>
                 <a className="button-secondary" href="/resume.pdf" target="_blank" rel="noreferrer">
-                  Résumé
+                  Resume
                 </a>
                 <a className="button-secondary" href="https://github.com/rivacoit" target="_blank" rel="noreferrer">
                   GitHub
