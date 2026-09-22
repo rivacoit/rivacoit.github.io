@@ -10,10 +10,13 @@ import ClickSpark from "./reactbits/ClickSpark.jsx";
 /* ------------------------------------------------------------------ */
 
 const ABOUT_TEXT = `Victoria Yang - CS @ Stanford (B.S., expected 2029).
-Curious about a lot: AI, AI safety, systems, security, and the occasional
-startup idea. Currently an ML intern at DeepTempo and Network Lead for
-Stanford's CCDC team. Past: Stanford AI Lab (Dror Lab), Carnegie Mellon,
-Google, and Cal Poly Pomona. Non-Trivial Fellow (172 of 11,583).`;
+Software engineer who likes shipping things end to end: backend services,
+data pipelines, full-stack apps, and the ML underneath. Curious about a
+lot — AI, AI safety, systems, security, and the occasional startup idea.
+Most recently an engineering intern at Socket; currently Network Lead for
+Stanford's CCDC team. Past: DeepTempo, Stanford AI Lab (Dror Lab), Yekola,
+Carnegie Mellon, Google, and Cal Poly Pomona. Non-Trivial Fellow
+(172 of 11,583).`;
 
 const CONTACT_TEXT = `Victoria Yang
 Email:    victoriayang425@gmail.com
@@ -21,16 +24,20 @@ Stanford: vicyang@stanford.edu
 Phone:    (909) 729-7491
 GitHub:   github.com/rivacoit`;
 
-const SKILLS_TEXT = `Languages & ML
-- Python, PyTorch, scikit-learn, XGBoost
-- Transformers, Graph Neural Networks, NLP, LLMs
+const SKILLS_TEXT = `Languages
+- Python, C++, C, JavaScript/TypeScript, SQL, Bash
 
 Frameworks & Tools
-- Next.js, React, Supabase, Vertex AI, Azure, Git
+- Next.js, React, Supabase, PyTorch, scikit-learn, XGBoost
+- Git, Linux, AI-assisted development tools
 
-Security
-- Network defense, firewalls, intrusion detection
-- Reverse engineering, IoT security, defense-in-depth`;
+Cloud & Infrastructure
+- AWS (Lambda, S3), Azure, Google Cloud (Vertex AI)
+- Automated data pipelines, scheduled jobs
+
+Machine Learning
+- Model fine-tuning, Transformers, graph neural networks
+- Evaluation design, anomaly detection, synthetic data generation`;
 
 const HELP_TEXT = `Shell-style navigation:
   tab         autocomplete commands
@@ -55,29 +62,34 @@ const NAV_LINKS = [
 const EDUCATION = {
   org: "Stanford University",
   detail: "B.S. in Computer Science (intended) · Expected Jun 2029",
-  gpa: "4.10 / 4.30",
+  gpa: "4.093 / 4.30",
   note: "Selected coursework:",
   courses: [
     { id: "CS 229", name: "Machine Learning" },
+    { id: "CS 238", name: "Decision Making Under Uncertainty" },
     { id: "CS 152", name: "Trust & Safety" },
+    { id: "CS 144", name: "Introduction to Computer Networking" },
+    { id: "CS 111", name: "Operating Systems Principles" },
     { id: "CS 109", name: "Probability for Computer Scientists" },
     { id: "CS 107", name: "Computer Organization & Systems" },
     { id: "CS 106B", name: "Programming Abstractions" },
     { id: "CS 103", name: "Mathematical Foundations of Computing" },
-    { id: "MATH 51", name: "Linear Algebra & Multivariable Calculus" },
+    { id: "MATH 110", name: "Number Theory for Cryptography" },
     { id: "MATH 104", name: "Applied Matrix Theory" },
+    { id: "MATH 51", name: "Linear Algebra & Multivariable Calculus" },
   ],
 };
 
 const EXPERIENCES = [
   {
-    org: "DeepTempo",
-    role: "Machine Learning Intern",
-    date: "Feb 2026 - Present",
-    place: "Hybrid · Stanford, CA",
+    org: "Socket",
+    role: "Engineering Intern",
+    date: "Jun - Sep 2026",
+    place: "Remote",
     bullets: [
-      "Build and validate end-to-end ML pipelines for network intrusion detection, engineering features and evaluating models on high-dimensional NetFlow data.",
-      "Generate synthetic enterprise network traffic via statistical distribution fitting to train and stress-test anomaly-detection models against realistic attack patterns.",
+      "Built an automated pipeline to collect, deduplicate, and refine security benchmark datasets across Socket's open-source vulnerability-detection suite, powering model comparison and selection.",
+      "Consolidated fragmented, manually-maintained benchmarks into one unified schema with automated ingestion from the threat review feed and scheduled refresh.",
+      "Shipped it as an internal tool used across teams; gathered requirements from engineers to drive adoption.",
     ],
   },
   {
@@ -91,12 +103,13 @@ const EXPERIENCES = [
     ],
   },
   {
-    org: "Socket",
-    role: "Machine Learning Intern (incoming)",
-    date: "Jun - Sep 2026",
-    place: "Remote",
+    org: "DeepTempo",
+    role: "Machine Learning Intern",
+    date: "Feb - Jun 2026",
+    place: "Hybrid · Stanford, CA",
     bullets: [
-      "Incoming ML intern on an open-source supply-chain security platform, working on malicious-package detection across the npm/PyPI ecosystem.",
+      "Built and validated end-to-end ML pipelines for network intrusion detection, engineering features and evaluating models on high-dimensional NetFlow data.",
+      "Generated synthetic enterprise network traffic via statistical distribution fitting to train and stress-test anomaly-detection models against realistic attack patterns.",
     ],
   },
   {
@@ -107,6 +120,26 @@ const EXPERIENCES = [
     bullets: [
       "Integrated state-of-the-art ML into ligand–protein binding-affinity prediction pipelines for computational drug discovery.",
       "Surveyed recent ML-for-drug-discovery literature to identify research gaps and the most promising directions for the lab.",
+    ],
+  },
+  {
+    org: "Yekola",
+    role: "Backend / AI Engineering Intern",
+    date: "2024",
+    place: "Remote",
+    bullets: [
+      "Built backend services on AWS Lambda and S3 for a language-learning app targeting 2,000+ African languages, including endangered ones with almost no available training data.",
+      "Fine-tuned speech-to-text models across multiple low-resource African languages on the AI team.",
+    ],
+  },
+  {
+    org: "Cal Poly Pomona",
+    role: "Research & Software Engineering Intern",
+    date: "Jun 2023 - Aug 2024",
+    place: "Hybrid",
+    bullets: [
+      "Designed, built, and launched a mobile ML app for music-therapy intervention, shipped live on the Apple App Store and Google Play.",
+      "Modeled emotion in text with ML and NLP to drive intervention selection; first-author publication at the 5th Intl. Conference on Semantic & Natural Language Processing, plus first place at IgniteCS, GameGala, and the OC Science & Engineering Fair.",
     ],
   },
   {
@@ -145,16 +178,6 @@ const EXPERIENCES = [
       "Selected as 1 of 172 fellows from 11,583 applicants; conducted cognitive-science research on how fiction shapes attitudes toward AI risk.",
     ],
   },
-  {
-    org: "Cal Poly Pomona",
-    role: "Research & Software Engineering Intern",
-    date: "Jun 2023 - Aug 2024",
-    place: "Hybrid",
-    bullets: [
-      "First-author publication and presentation at the 5th Intl. Conference on Semantic & Natural Language Processing; first place at IgniteCS, GameGala, and the OC Science & Engineering Fair.",
-      "Designed and launched an ML-based music-therapy app, shipped live on the Apple App Store and Google Play.",
-    ],
-  },
 ];
 
 const PROJECTS = [
@@ -183,16 +206,20 @@ const PROJECTS = [
 
 const SKILL_GROUPS = [
   {
-    title: "Languages & ML",
-    items: ["Python", "PyTorch", "scikit-learn", "XGBoost", "Transformers", "Graph Neural Networks", "NLP", "LLMs"],
+    title: "Languages",
+    items: ["Python", "C++", "C", "JavaScript", "TypeScript", "SQL", "Bash"],
   },
   {
     title: "Frameworks & Tools",
-    items: ["Next.js", "React", "Supabase", "Vertex AI", "Azure", "Git"],
+    items: ["Next.js", "React", "Supabase", "PyTorch", "scikit-learn", "XGBoost", "Git", "Linux"],
   },
   {
-    title: "Security",
-    items: ["Network Defense", "Firewalls", "Intrusion Detection", "Reverse Engineering", "IoT Security", "Defense-in-Depth"],
+    title: "Cloud & Infrastructure",
+    items: ["AWS (Lambda, S3)", "Azure", "Vertex AI", "Data Pipelines", "Scheduled Jobs"],
+  },
+  {
+    title: "Machine Learning",
+    items: ["Fine-Tuning", "Transformers", "Graph Neural Networks", "Evaluation Design", "Anomaly Detection", "Synthetic Data"],
   },
 ];
 
@@ -503,34 +530,24 @@ function HomePage({ onEnterTerminal }) {
                       e.currentTarget.closest(".profile-wrap").style.display = "none";
                     }}
                   />
-                  <figcaption className="polaroid-caption">me @ mt. tam</figcaption>
+                  <figcaption className="polaroid-caption">me @ the colosseum</figcaption>
                 </figure>
               </div>
               <div>
                 <p className="hero-hi">hi, i&apos;m</p>
                 <h1 className="hero-name">Victoria</h1>
                 <p className="hero-tagline">
-                  A Stanford CS student building (and breaking) things across AI,
-                  systems, and security.
+                  A computer science student at Stanford, interested in AI and
+                  the systems around it.
                 </p>
-                <div className="currently">
-                  <CatFetch />
-                  currently — ML intern @{" "}
-                  <a className="currently-link" href="#experience">DeepTempo</a> &amp;
-                  network lead @{" "}
-                  <a className="currently-link" href="#experience">Stanford CCDC</a>
-                </div>
                 <div className="home-actions">
-                  <a className="button-primary" href="/resume.pdf" target="_blank" rel="noreferrer">
-                    Resume
-                  </a>
-                  <a className="button-secondary" href="mailto:victoriayang425@gmail.com">
+                  <a className="button-primary" href="mailto:victoriayang425@gmail.com">
                     Email
                   </a>
                   <a className="button-secondary" href="https://github.com/rivacoit" target="_blank" rel="noreferrer">
                     GitHub
                   </a>
-                  <a className="button-secondary" href="https://www.linkedin.com/in/yuqi-yang-96953b330/" target="_blank" rel="noreferrer">
+                  <a className="button-secondary" href="https://www.linkedin.com/in/victoria-yang-96953b330/" target="_blank" rel="noreferrer">
                     LinkedIn
                   </a>
                 </div>
@@ -587,7 +604,7 @@ function HomePage({ onEnterTerminal }) {
           </section>
 
           <section id="projects" className="home-section">
-            <SectionHead title="Selected work" sub="ml & trust-and-safety projects" />
+            <SectionHead title="Selected work" sub="things i've designed, built, and shipped" />
             <div className="project-grid">
               {PROJECTS.map((p, i) => (
                 <Reveal key={p.title} delay={i * 90}>
@@ -648,27 +665,26 @@ function HomePage({ onEnterTerminal }) {
             <SpotlightCard className="contact-card" spotlightColor="rgba(201, 138, 160, 0.16)">
               <h2>Let&apos;s connect</h2>
               <p>
-                I&apos;m looking for internships and research collaborations across
-                AI, systems, and security. Email is the best way to reach me.
+                I&apos;m looking for software engineering and ML internships, plus
+                research collaborations. Email is the best way to reach me.
               </p>
               <div className="home-actions">
                 <a className="button-primary" href="mailto:victoriayang425@gmail.com">
                   victoriayang425@gmail.com
                 </a>
-                <a className="button-secondary" href="/resume.pdf" target="_blank" rel="noreferrer">
-                  Resume
-                </a>
                 <a className="button-secondary" href="https://github.com/rivacoit" target="_blank" rel="noreferrer">
                   GitHub
                 </a>
-                <a className="button-secondary" href="https://www.linkedin.com/in/yuqi-yang-96953b330/" target="_blank" rel="noreferrer">
+                <a className="button-secondary" href="https://www.linkedin.com/in/victoria-yang-96953b330/" target="_blank" rel="noreferrer">
                   LinkedIn
                 </a>
               </div>
             </SpotlightCard>
           </Reveal>
           <footer className="home-footer">
-            <span>© 2026 Victoria Yang</span>
+            <span className="footer-left">
+              <CatFetch />© 2026 Victoria Yang
+            </span>
             <button className="footer-terminal" onClick={onEnterTerminal}>
               terminal mode →
             </button>
