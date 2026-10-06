@@ -475,7 +475,6 @@ function HomePage() {
                       e.currentTarget.closest(".profile-wrap").style.display = "none";
                     }}
                   />
-                  <figcaption className="polaroid-caption">me @ the colosseum</figcaption>
                 </figure>
               </div>
               <div>

@@ -366,16 +366,6 @@ h4,
   background: var(--bg-2);
 }
 
-.polaroid-caption {
-  display: block;
-  text-align: center;
-  font-family: Fraunces, serif;
-  font-style: italic;
-  font-size: 0.95rem;
-  color: var(--ink-faint);
-  padding: 0.65rem 0 0.35rem;
-}
-
 /* ----------------------------------------------------------------- */
 /* Buttons                                                           */
 /* ----------------------------------------------------------------- */
