@@ -1,6 +1,6 @@
 # rivacoit
 
-Terminal-style portfolio site (React + Vite). `public/projects.txt` and `public/experiences.txt` use block entries (see `help` in the shell). `public/education.txt` is plain text shown by `cat education` at `~`. Edit files and rebuild or refresh to update copy.
+Portfolio site (React + Vite). All content (education, experience, projects, skills) lives in the constants at the top of `src/App.jsx`.
 
 ```bash
 npm install

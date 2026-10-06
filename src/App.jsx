@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { fetchBlockCatalog, fetchPlainTextFile } from "./blockCatalog.js";
 import SpotlightCard from "./reactbits/SpotlightCard.jsx";
 import TiltCard from "./reactbits/TiltCard.jsx";
 import ClickSpark from "./reactbits/ClickSpark.jsx";
@@ -8,48 +7,6 @@ import ClickSpark from "./reactbits/ClickSpark.jsx";
 /* ------------------------------------------------------------------ */
 /* Content                                                            */
 /* ------------------------------------------------------------------ */
-
-const ABOUT_TEXT = `Victoria Yang - CS @ Stanford (B.S., expected 2029).
-Software engineer who likes shipping things end to end: backend services,
-data pipelines, full-stack apps, and the ML underneath. Curious about a
-lot — AI, AI safety, systems, security, and the occasional startup idea.
-Most recently an engineering intern at Socket; currently Network Lead for
-Stanford's CCDC team. Past: DeepTempo, Stanford AI Lab (Dror Lab), Yekola,
-Carnegie Mellon, Google, and Cal Poly Pomona. Non-Trivial Fellow
-(172 of 11,583).`;
-
-const CONTACT_TEXT = `Victoria Yang
-Email:    victoriayang425@gmail.com
-Stanford: vicyang@stanford.edu
-Phone:    (909) 729-7491
-GitHub:   github.com/rivacoit`;
-
-const SKILLS_TEXT = `Languages
-- Python, C++, C, JavaScript/TypeScript, SQL, Bash
-
-Frameworks & Tools
-- Next.js, React, Supabase, PyTorch, scikit-learn, XGBoost
-- Git, Linux, AI-assisted development tools
-
-Cloud & Infrastructure
-- AWS (Lambda, S3), Azure, Google Cloud (Vertex AI)
-- Automated data pipelines, scheduled jobs
-
-Machine Learning
-- Model fine-tuning, Transformers, graph neural networks
-- Evaluation design, anomaly detection, synthetic data generation`;
-
-const HELP_TEXT = `Shell-style navigation:
-  tab         autocomplete commands
-  ls          list files in the current directory
-  cd <dir>    enter a directory
-  pwd         print working directory
-  cat <file>  print file content
-
-Other:
-  help        show this text
-  clear       clear the screen
-  whoami      easter egg`;
 
 const NAV_LINKS = [
   { href: "#education", label: "education" },
@@ -65,16 +22,16 @@ const EDUCATION = {
   gpa: "4.093 / 4.30",
   note: "Selected coursework:",
   courses: [
-    { id: "CS 229", name: "Machine Learning" },
-    { id: "CS 238", name: "Decision Making Under Uncertainty" },
-    { id: "CS 152", name: "Trust & Safety" },
-    { id: "CS 144", name: "Introduction to Computer Networking" },
-    { id: "CS 111", name: "Operating Systems Principles" },
-    { id: "CS 109", name: "Probability for Computer Scientists" },
+    { id: "CS 111", name: "Operating Systems Principles (in progress)" },
+    { id: "CS 251", name: "Cryptocurrencies & Blockchain Technologies (in progress)" },
+    { id: "MATH 110", name: "Number Theory for Cryptography (in progress)" },
     { id: "CS 107", name: "Computer Organization & Systems" },
-    { id: "CS 106B", name: "Programming Abstractions" },
+    { id: "CS 152", name: "Trust & Safety" },
+    { id: "CS 229", name: "Machine Learning" },
+    { id: "CS 238", name: "Decision Making Under Uncertainty (in progress)" },
+    { id: "CS 109", name: "Probability for Computer Scientists" },
     { id: "CS 103", name: "Mathematical Foundations of Computing" },
-    { id: "MATH 110", name: "Number Theory for Cryptography" },
+    { id: "CS 106B", name: "Programming Abstractions" },
     { id: "MATH 104", name: "Applied Matrix Theory" },
     { id: "MATH 51", name: "Linear Algebra & Multivariable Calculus" },
   ],
@@ -82,14 +39,24 @@ const EDUCATION = {
 
 const EXPERIENCES = [
   {
+    org: "Stanford Empirical Security Research Group (ESRG)",
+    role: "Student Researcher",
+    date: "Sep 2026 - Present",
+    place: "Stanford, CA · Advised by Prof. Zakir Durumeric",
+    bullets: [
+      "Investigating whether longitudinal trends in large-scale network telemetry can be detected automatically, as groundwork for a long-term network measurement system.",
+      "Characterizing ~1 year of Stanford campus Zeek connection, DNS, and TLS logs (1B+ records, ~300 GB) in BigQuery to identify which trends are worth automating.",
+    ],
+  },
+  {
     org: "Socket",
-    role: "Engineering Intern",
+    role: "Research Intern",
     date: "Jun - Sep 2026",
     place: "Remote",
     bullets: [
-      "Built an automated pipeline to collect, deduplicate, and refine security benchmark datasets across Socket's open-source vulnerability-detection suite, powering model comparison and selection.",
-      "Consolidated fragmented, manually-maintained benchmarks into one unified schema with automated ingestion from the threat review feed and scheduled refresh.",
-      "Shipped it as an internal tool used across teams; gathered requirements from engineers to drive adoption.",
+      "Built Socket's unified benchmark for supply-chain malware detection from scratch: a reviewed, fuzzy-hash-deduplicated corpus of 7,000 labeled packages across 15 ecosystems (up from 3), with a TypeScript CLI for collection, validation, scanning, and evaluation.",
+      "Developed an ingestion pipeline that turns production threat-feed detections, including false positives, into test cases with the flagged file recorded (1,267 cases), and added sources for agentic-scanner vs. production disagreements and customer package usage.",
+      "Created a benchmark runner and Next.js dashboard evaluating 10+ commercial and open-weight LLMs on recall, false positive rate, cost, and latency; showed that a model the team planned to adopt underperformed similarly priced alternatives, prompting a re-evaluation.",
     ],
   },
   {
@@ -108,18 +75,9 @@ const EXPERIENCES = [
     date: "Feb - Jun 2026",
     place: "Hybrid · Stanford, CA",
     bullets: [
-      "Built and validated end-to-end ML pipelines for network intrusion detection, engineering features and evaluating models on high-dimensional NetFlow data.",
-      "Generated synthetic enterprise network traffic via statistical distribution fitting to train and stress-test anomaly-detection models against realistic attack patterns.",
-    ],
-  },
-  {
-    org: "Stanford AI Lab (SAIL) · Dror Lab",
-    role: "Research Assistant",
-    date: "Oct 2025 - Mar 2026",
-    place: "Stanford, CA",
-    bullets: [
-      "Integrated state-of-the-art ML into ligand–protein binding-affinity prediction pipelines for computational drug discovery.",
-      "Surveyed recent ML-for-drug-discovery literature to identify research gaps and the most promising directions for the lab.",
+      "Built a pipeline that generates labeled synthetic network attack traffic for training and evaluating anomaly-detection models, fit to ~940K real Zeek attack flows across 5 MITRE ATT&CK techniques.",
+      "Modeled attacks as multi-phase sequences (e.g., brute force as spray → session → grind) where single distributions failed, matching the real flow-duration profile within 1 percentage point; selected per-feature fits by KS, Wasserstein, and quantile error.",
+      "Grounded attack specs in real adversary behavior by merging MITRE technique data from 5 sources (ATT&CK, Caldera, Atomic Red Team, Attack Flow, CTID emulation plans) into one registry.",
     ],
   },
   {
@@ -138,8 +96,8 @@ const EXPERIENCES = [
     date: "Jun 2023 - Aug 2024",
     place: "Hybrid",
     bullets: [
-      "Designed, built, and launched a mobile ML app for music-therapy intervention, shipped live on the Apple App Store and Google Play.",
-      "Modeled emotion in text with ML and NLP to drive intervention selection; first-author publication at the 5th Intl. Conference on Semantic & Natural Language Processing, plus first place at IgniteCS, GameGala, and the OC Science & Engineering Fair.",
+      "Built Lyrically Yours, a Flutter/Firebase mobile app that recommended songs by matching a user's description of how they felt against song lyrics, with Spotify and Genius API integration.",
+      "Trained an emotion classifier on 16K labeled sentences, comparing 4 scikit-learn models (Random Forest best, 89% accuracy); first-author paper at SNLP 2024, plus first place at IgniteCS, GameGala, and the OC Science & Engineering Fair.",
     ],
   },
   {
@@ -185,9 +143,9 @@ const PROJECTS = [
     title: "EvolveGCN-T: Self-Attention for Weight Evolution in Dynamic Graphs",
     course: "CS229 Machine Learning · Stanford",
     bullets: [
-      "Proposed and implemented EvolveGCN-T, a novel dynamic graph neural network that replaces EvolveGCN's GRU weight recurrence with a causally-masked Transformer attending directly over the history of GCN weight matrices — a pathway prior work hadn't explored.",
+      "Implemented EvolveGCN-T, a dynamic graph neural network that replaces EvolveGCN's GRU weight recurrence with a Transformer encoder attending directly over the history of past GCN weight matrices — a pathway prior work hadn't explored.",
       "Built the full PyTorch training & logging pipeline (Weights & Biases) and ran every experiment across three benchmarks (Elliptic, Bitcoin-OTC, SBM); in an architecture-matched head-to-head, the Transformer lifted Bitcoin-OTC edge-classification micro-F1 from 0.699 → 0.783.",
-      "Reproduced published EvolveGCN baselines (Elliptic illicit-class F1 0.578, SBM MAP 0.194) to validate correctness, then isolated optimization stability — not context length — as the dominant performance factor.",
+      "Reproduced published EvolveGCN baselines (Elliptic illicit-class F1 0.578, SBM MAP 0.194) to validate correctness, then ran ablations isolating optimization stability — not context length — as the dominant performance factor.",
     ],
     tags: ["PyTorch", "Transformers", "Graph NNs", "Weights & Biases"],
     links: [{ label: "Read the report", href: "/cs229-report.pdf" }],
@@ -196,8 +154,8 @@ const PROJECTS = [
     title: "Hybrid Fraud Detection for Fake Job Postings",
     course: "CS152 Trust & Safety · Stanford",
     bullets: [
-      "Built a production hybrid rule-based + LLM (Gemini 2.5 Flash) classifier with a moderator-feedback loop that auto-injects resolved cases as few-shot examples — reaching F1 0.913 and 0.95 fraud recall at 4.5× lower inference cost than a pure-LLM baseline.",
-      "Owned ML and backend for a 5-person team: shipped on a Next.js / Supabase / Vertex AI stack with fail-closed routing, and built a three-approach offline eval harness (TF-IDF + LR, LLM, hybrid) to benchmark accuracy against cost.",
+      "Built a hybrid rule-based + LLM (Gemini 2.5 Flash) fraud classifier with a moderator-feedback loop that auto-injects resolved cases as few-shot examples — reaching 0.91 F1 and 0.95 fraud recall at 4.5× lower inference cost than an LLM-only baseline (200-example balanced eval).",
+      "Led ML and backend integration for a 5-person team on a Next.js / Supabase / Vertex AI stack, adding fail-closed routing and an offline eval harness comparing TF-IDF + logistic regression, LLM-only, and hybrid classifiers on accuracy vs. cost.",
     ],
     tags: ["LLMs", "Next.js", "Supabase", "Vertex AI"],
     links: [{ label: "GitHub", href: "https://github.com/stanfordcs152/sp26-team-19" }],
@@ -207,31 +165,21 @@ const PROJECTS = [
 const SKILL_GROUPS = [
   {
     title: "Languages",
-    items: ["Python", "C++", "C", "JavaScript", "TypeScript", "SQL", "Bash"],
+    items: ["Python", "C", "C++", "Rust", "TypeScript", "JavaScript", "SQL", "Bash"],
   },
   {
-    title: "Frameworks & Tools",
-    items: ["Next.js", "React", "Supabase", "PyTorch", "scikit-learn", "XGBoost", "Git", "Linux"],
+    title: "Systems & Networking",
+    items: ["Linux", "Git", "Docker", "Make/CMake", "Valgrind", "Wireshark", "tcpdump", "Zeek"],
   },
   {
-    title: "Cloud & Infrastructure",
-    items: ["AWS (Lambda, S3)", "Azure", "Vertex AI", "Data Pipelines", "Scheduled Jobs"],
+    title: "Data & ML",
+    items: ["BigQuery", "PyTorch", "pandas", "NumPy", "SciPy", "scikit-learn", "XGBoost", "Jupyter"],
   },
   {
-    title: "Machine Learning",
-    items: ["Fine-Tuning", "Transformers", "Graph Neural Networks", "Evaluation Design", "Anomaly Detection", "Synthetic Data"],
+    title: "Cloud & Web",
+    items: ["AWS (Lambda, S3)", "Azure", "Vertex AI", "Next.js", "React", "Supabase"],
   },
 ];
-
-const EMPTY_CATALOGS = {
-  projects: { bySlug: Object.create(null), slugs: [] },
-  experiences: { bySlug: Object.create(null), slugs: [] },
-};
-
-const VFS_HOME = {
-  dirs: ["projects", "experiences"],
-  files: ["about", "contact", "skills", "education", "help"],
-};
 
 /* ------------------------------------------------------------------ */
 /* Scroll reveal                                                      */
@@ -462,7 +410,7 @@ function SectionHead({ title, sub }) {
 /* Home page                                                          */
 /* ------------------------------------------------------------------ */
 
-function HomePage({ onEnterTerminal }) {
+function HomePage() {
   const [activeSection, setActiveSection] = useState("");
   const [showTop, setShowTop] = useState(false);
 
@@ -512,9 +460,6 @@ function HomePage({ onEnterTerminal }) {
                   {l.label}
                 </a>
               ))}
-              <button className="nav-terminal" onClick={onEnterTerminal}>
-                <span className="nav-terminal-glyph">{">_"}</span> terminal
-              </button>
             </nav>
           </header>
 
@@ -537,8 +482,8 @@ function HomePage({ onEnterTerminal }) {
                 <p className="hero-hi">hi, i&apos;m</p>
                 <h1 className="hero-name">Victoria</h1>
                 <p className="hero-tagline">
-                  A computer science student at Stanford, interested in AI and
-                  the systems around it.
+                  A computer science student at Stanford, interested in systems
+                  and security research.
                 </p>
                 <div className="home-actions">
                   <a className="button-primary" href="mailto:victoriayang425@gmail.com">
@@ -665,8 +610,9 @@ function HomePage({ onEnterTerminal }) {
             <SpotlightCard className="contact-card" spotlightColor="rgba(201, 138, 160, 0.16)">
               <h2>Let&apos;s connect</h2>
               <p>
-                I&apos;m looking for software engineering and ML internships, plus
-                research collaborations. Email is the best way to reach me.
+                I&apos;m looking for software engineering and research internships on
+                systems, security, and infrastructure teams, plus research
+                collaborations. Email is the best way to reach me.
               </p>
               <div className="home-actions">
                 <a className="button-primary" href="mailto:victoriayang425@gmail.com">
@@ -685,9 +631,6 @@ function HomePage({ onEnterTerminal }) {
             <span className="footer-left">
               <CatFetch />© 2026 Victoria Yang
             </span>
-            <button className="footer-terminal" onClick={onEnterTerminal}>
-              terminal mode →
-            </button>
           </footer>
         </section>
         </main>
@@ -704,220 +647,6 @@ function HomePage({ onEnterTerminal }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Terminal mode                                                      */
-/* ------------------------------------------------------------------ */
-
-function vfsNode(cwd, catalogs) {
-  const key = cwd.join("/");
-  if (key === "") return VFS_HOME;
-  if (key === "projects") return { dirs: [], files: catalogs.projects.slugs };
-  if (key === "experiences") return { dirs: [], files: catalogs.experiences.slugs };
-  return null;
-}
-
-function formatPromptPath(cwd) {
-  return cwd.length ? `~/${cwd.join("/")}` : "~";
-}
-
-function splitCommand(text) {
-  const parts = text.split(/\s+/).filter(Boolean);
-  return { name: parts[0]?.toLowerCase() ?? "", args: parts.slice(1) };
-}
-
-function lsOutput(cwd, catalogs) {
-  const node = vfsNode(cwd, catalogs);
-  if (!node) return "ls: cannot open directory: No such file or directory";
-  const entries = [...node.dirs.map((d) => `${d}/`), ...node.files].sort((a, b) =>
-    a.localeCompare(b),
-  );
-  return entries.length ? entries.join("\n") : "(empty)";
-}
-
-function runCd(args, cwd) {
-  if (args.length > 1) return { nextCwd: cwd, error: "cd: too many arguments" };
-  const target = args[0];
-  if (!target || target === "~" || target === "/") return { nextCwd: [], error: null };
-  if (target === "..") return { nextCwd: cwd.slice(0, -1), error: null };
-  const node = vfsNode(cwd, EMPTY_CATALOGS);
-  if (node?.dirs.includes(target)) return { nextCwd: [...cwd, target], error: null };
-  return { nextCwd: cwd, error: `cd: no such file or directory: ${target}` };
-}
-
-function runCat(args, cwd, catalogs, educationText) {
-  if (!args.length) return "cat: missing file operand";
-  if (args.length > 1) return "cat: too many arguments";
-  const name = args[0];
-  const key = cwd.join("/");
-  const node = vfsNode(cwd, catalogs);
-  if (!node) return "cat: no such file or directory";
-  if (!node.files.includes(name)) {
-    if (node.dirs.includes(name)) return `cat: ${name}: Is a directory`;
-    return `cat: ${name}: No such file or directory`;
-  }
-  if (key === "") {
-    if (name === "about") return ABOUT_TEXT;
-    if (name === "contact") return CONTACT_TEXT;
-    if (name === "skills") return SKILLS_TEXT;
-    if (name === "help") return HELP_TEXT;
-    if (name === "education") return educationText ?? "education.txt is still loading...";
-  }
-  if (key === "projects") return catalogs.projects.bySlug[name];
-  if (key === "experiences") return catalogs.experiences.bySlug[name];
-  return `cat: ${name}: No such file or directory`;
-}
-
-const COMMANDS = ["cat", "cd", "clear", "help", "ls", "pwd", "whoami"];
-
-function tabComplete(input, cwd, catalogs) {
-  const parts = input.split(/\s+/).filter(Boolean);
-  if (!parts.length) return null;
-  if (parts.length === 1) {
-    const matches = COMMANDS.filter((c) => c.startsWith(parts[0].toLowerCase()));
-    if (matches.length === 1) return matches[0] + " ";
-    return null;
-  }
-  const [cmd, partial] = [parts[0].toLowerCase(), parts.at(-1) ?? ""];
-  const node = vfsNode(cwd, catalogs);
-  if (!node) return null;
-  if (cmd === "cd") {
-    const targets = [...node.dirs, "..", "~"].filter((d) => d.startsWith(partial));
-    if (targets.length === 1) return input.replace(new RegExp(`${partial}$`), targets[0]);
-  }
-  if (cmd === "cat") {
-    const targets = node.files.filter((f) => f.startsWith(partial));
-    if (targets.length === 1) return input.replace(new RegExp(`${partial}$`), targets[0]);
-  }
-  return null;
-}
-
-function TerminalShell({ onExit }) {
-  const [history, setHistory] = useState([
-    { type: "output", text: "rivacoit shell — type 'help' to get started, 'ls' to look around." },
-  ]);
-  const [cwd, setCwd] = useState([]);
-  const [catalogs, setCatalogs] = useState(EMPTY_CATALOGS);
-  const [educationText, setEducationText] = useState(null);
-  const [input, setInput] = useState("");
-  const inputRef = useRef(null);
-  const bottomRef = useRef(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const [projects, experiences, education] = await Promise.allSettled([
-        fetchBlockCatalog("projects.txt"),
-        fetchBlockCatalog("experiences.txt"),
-        fetchPlainTextFile("education.txt"),
-      ]);
-      if (cancelled) return;
-      setCatalogs({
-        projects:
-          projects.status === "fulfilled" ? projects.value : EMPTY_CATALOGS.projects,
-        experiences:
-          experiences.status === "fulfilled"
-            ? experiences.value
-            : EMPTY_CATALOGS.experiences,
-      });
-      if (education.status === "fulfilled") {
-        setEducationText(
-          education.value.trimEnd() || "(no content yet - edit public/education.txt)",
-        );
-      } else {
-        setEducationText("(could not load education.txt)");
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [history, input]);
-
-  const handleCommand = (raw) => {
-    const text = raw.trim();
-    const path = formatPromptPath(cwd);
-    if (text === "") {
-      setHistory((h) => [...h, { type: "input", text: "", path }]);
-      setInput("");
-      return;
-    }
-    const { name, args } = splitCommand(text);
-    let output = null;
-    let nextCwd = cwd;
-    if (name === "ls") output = lsOutput(cwd, catalogs);
-    else if (name === "pwd") output = `/home/visitor/${cwd.join("/")}`.replace(/\/$/, "");
-    else if (name === "cd") {
-      const result = runCd(args, cwd);
-      nextCwd = result.nextCwd;
-      output = result.error;
-    } else if (name === "cat") output = runCat(args, cwd, catalogs, educationText);
-    else if (name === "help") output = HELP_TEXT;
-    else if (name === "whoami") output = ABOUT_TEXT;
-    else if (name === "clear") output = "CLEAR";
-    else output = `command not found: ${text}. Type help for hints.`;
-
-    if (output === "CLEAR") setHistory([]);
-    else {
-      setCwd(nextCwd);
-      setHistory((h) => [
-        ...h,
-        { type: "input", text, path },
-        ...(output ? [{ type: "output", text: output }] : []),
-      ]);
-    }
-    setInput("");
-  };
-
-  return (
-    <div className="terminal-wrap">
-      <div className="terminal-toolbar">
-        <button className="button-secondary" onClick={onExit}>
-          ← back to the site
-        </button>
-      </div>
-      <div className="terminal" onClick={() => inputRef.current?.focus()}>
-        {history.map((line, i) => (
-          <pre key={i} className="terminal-line">
-            {line.type === "input"
-              ? `visitor@rivacoit:${line.path ?? "~"}$ ${line.text}`
-              : line.text}
-          </pre>
-        ))}
-        <div className="terminal-input-row">
-          <span className="terminal-prompt">visitor@rivacoit:{formatPromptPath(cwd)}$</span>
-          <input
-            ref={inputRef}
-            className="terminal-input"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleCommand(input);
-              if (e.key === "Tab") {
-                e.preventDefault();
-                const next = tabComplete(input, cwd, catalogs);
-                if (next) setInput(next);
-              }
-            }}
-            autoFocus
-            spellCheck={false}
-            autoComplete="off"
-            aria-label="Terminal command"
-          />
-        </div>
-        <div ref={bottomRef} />
-      </div>
-    </div>
-  );
-}
-
 export default function App() {
-  const [mode, setMode] = useState("home");
-  return mode === "home" ? (
-    <HomePage onEnterTerminal={() => setMode("terminal")} />
-  ) : (
-    <TerminalShell onExit={() => setMode("home")} />
-  );
+  return <HomePage />;
 }
