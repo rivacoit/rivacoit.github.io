@@ -481,8 +481,8 @@ function HomePage() {
                 <p className="hero-hi">hi, i&apos;m</p>
                 <h1 className="hero-name">Victoria</h1>
                 <p className="hero-tagline">
-                  A computer science student at Stanford, interested in systems
-                  and security research.
+                  A computer science student at Stanford working on systems and
+                  security research, and the ML that runs through both.
                 </p>
                 <div className="home-actions">
                   <a className="button-primary" href="mailto:victoriayang425@gmail.com">
@@ -609,8 +609,8 @@ function HomePage() {
             <SpotlightCard className="contact-card" spotlightColor="rgba(201, 138, 160, 0.16)">
               <h2>Let&apos;s connect</h2>
               <p>
-                I&apos;m looking for software engineering and research internships on
-                systems, security, and infrastructure teams, plus research
+                I&apos;m looking for software engineering, ML, and research internships
+                on systems, security, and infrastructure teams, plus research
                 collaborations. Email is the best way to reach me.
               </p>
               <div className="home-actions">
