@@ -481,8 +481,8 @@ function HomePage() {
                 <p className="hero-hi">hi, i&apos;m</p>
                 <h1 className="hero-name">Victoria</h1>
                 <p className="hero-tagline">
-                  A computer science student at Stanford working on systems and
-                  security research, and the ML that runs through both.
+                  A computer science student at Stanford interested in systems,
+                  security, and ML.
                 </p>
                 <div className="home-actions">
                   <a className="button-primary" href="mailto:victoriayang425@gmail.com">
