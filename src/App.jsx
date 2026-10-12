@@ -24,11 +24,9 @@ const EDUCATION = {
   courses: [
     { id: "CS 111", name: "Operating Systems Principles (in progress)" },
     { id: "CS 251", name: "Cryptocurrencies & Blockchain Technologies (in progress)" },
-    { id: "MATH 110", name: "Number Theory for Cryptography (in progress)" },
     { id: "CS 107", name: "Computer Organization & Systems" },
     { id: "CS 152", name: "Trust & Safety" },
     { id: "CS 229", name: "Machine Learning" },
-    { id: "CS 238", name: "Decision Making Under Uncertainty (in progress)" },
     { id: "CS 109", name: "Probability for Computer Scientists" },
     { id: "CS 103", name: "Mathematical Foundations of Computing" },
     { id: "CS 106B", name: "Programming Abstractions" },
@@ -169,7 +167,7 @@ const SKILL_GROUPS = [
   },
   {
     title: "Systems & Networking",
-    items: ["Linux", "Git", "Docker", "Make/CMake", "Valgrind", "Wireshark", "tcpdump", "Zeek"],
+    items: ["Linux", "Git", "Docker", "Make/CMake", "Valgrind", "Wireshark", "tcpdump", "Zeek", "Claude Code", "Cursor"],
   },
   {
     title: "Data & ML",
