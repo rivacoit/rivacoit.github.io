@@ -18,7 +18,7 @@ const NAV_LINKS = [
 
 const EDUCATION = {
   org: "Stanford University",
-  detail: "B.S. in Computer Science (intended) · Expected Jun 2029",
+  detail: "B.S. in Computer Science · Expected Jun 2028 (accelerated track, 90 quarter units completed)",
   gpa: "4.093 / 4.30",
   note: "Selected coursework:",
   courses: [
@@ -54,7 +54,7 @@ const EXPERIENCES = [
     bullets: [
       "Built Socket's unified benchmark for supply-chain malware detection from scratch: a reviewed, fuzzy-hash-deduplicated corpus of 7,000 labeled packages across 15 ecosystems (up from 3), with a TypeScript CLI for collection, validation, scanning, and evaluation.",
       "Developed an ingestion pipeline that turns production threat-feed detections, including false positives, into test cases with the flagged file recorded (1,267 cases), and added sources for agentic-scanner vs. production disagreements and customer package usage.",
-      "Created a benchmark runner and Next.js dashboard evaluating 10+ commercial and open-weight LLMs on recall, false positive rate, cost, and latency; showed that a model the team planned to adopt underperformed similarly priced alternatives, prompting a re-evaluation.",
+      "Created a benchmark runner and Next.js dashboard, now used by Socket's engineering team, evaluating 10+ commercial and open-weight LLMs on recall, false positive rate, cost, and latency; showed that a model the team planned to adopt underperformed similarly priced alternatives, prompting a re-evaluation.",
     ],
   },
   {
@@ -63,8 +63,9 @@ const EXPERIENCES = [
     date: "Nov 2025 - Present",
     place: "Western Regional Champion · 7th Nationally",
     bullets: [
-      "Lead network defense for Stanford's competition team — configuring firewalls, hardening devices, and keeping scored services online under live red-team attack.",
-      "Apply defense-in-depth across enterprise-style environments, balancing security against usability to win the Western Regional title and place 7th nationally.",
+      "Configure Cisco routers, switches, and firewalls, harden Linux and Windows hosts, and segment the network to keep scored services online under live red-team attack; built tooling that summarizes iptables rules for faster auditing and changes.",
+      "Hunt and remove red-team access using packet capture analysis (Wireshark, tcpdump) and write incident reports; helped win the Western Regional title and place 7th nationally.",
+      "Prior: 4 years of network defense through CyberPatriot, including 1st place nationally in the 2025 National Finals Cisco Networking Challenge.",
     ],
   },
   {
@@ -81,11 +82,10 @@ const EXPERIENCES = [
   {
     org: "Yekola",
     role: "Backend / AI Engineering Intern",
-    date: "2024",
+    date: "Jun - Nov 2024",
     place: "Remote",
     bullets: [
       "Built backend services on AWS Lambda and S3 for a language-learning app targeting 2,000+ African languages, including endangered ones with almost no available training data.",
-      "Fine-tuned speech-to-text models across multiple low-resource African languages on the AI team.",
     ],
   },
   {
@@ -122,7 +122,7 @@ const EXPERIENCES = [
     date: "Jul 2024",
     place: "Remote",
     bullets: [
-      "Completed an intensive cybersecurity immersion covering IoT security, reverse engineering, and offensive/defensive techniques.",
+      "Completed a month-long cybersecurity program covering IoT security and reverse engineering; analyzed binaries with Ghidra.",
     ],
   },
   {
@@ -141,7 +141,7 @@ const PROJECTS = [
     title: "EvolveGCN-T: Self-Attention for Weight Evolution in Dynamic Graphs",
     course: "CS229 Machine Learning · Stanford",
     bullets: [
-      "Implemented EvolveGCN-T, a dynamic graph neural network that replaces EvolveGCN's GRU weight recurrence with a Transformer encoder attending directly over the history of past GCN weight matrices — a pathway prior work hadn't explored.",
+      "On a 3-person team, implemented EvolveGCN-T, a dynamic graph neural network that replaces EvolveGCN's GRU weight recurrence with a Transformer encoder attending directly over the history of past GCN weight matrices.",
       "Built the full PyTorch training & logging pipeline (Weights & Biases) and ran every experiment across three benchmarks (Elliptic, Bitcoin-OTC, SBM); in an architecture-matched head-to-head, the Transformer lifted Bitcoin-OTC edge-classification micro-F1 from 0.699 → 0.783.",
       "Reproduced published EvolveGCN baselines (Elliptic illicit-class F1 0.578, SBM MAP 0.194) to validate correctness, then ran ablations isolating optimization stability — not context length — as the dominant performance factor.",
     ],
@@ -153,29 +153,38 @@ const PROJECTS = [
     course: "CS152 Trust & Safety · Stanford",
     bullets: [
       "Built a hybrid rule-based + LLM (Gemini 2.5 Flash) fraud classifier with a moderator-feedback loop that auto-injects resolved cases as few-shot examples — reaching 0.91 F1 and 0.95 fraud recall at 4.5× lower inference cost than an LLM-only baseline (200-example balanced eval).",
-      "Led ML and backend integration for a 5-person team on a Next.js / Supabase / Vertex AI stack, adding fail-closed routing and an offline eval harness comparing TF-IDF + logistic regression, LLM-only, and hybrid classifiers on accuracy vs. cost.",
+      "Led ML and backend integration for a 5-person team on a Next.js / Supabase / Vertex AI stack, deployed on Vercel, adding fail-closed routing and an offline eval harness comparing TF-IDF + logistic regression, LLM-only, and hybrid classifiers on accuracy vs. cost.",
     ],
     tags: ["LLMs", "Next.js", "Supabase", "Vertex AI"],
     links: [{ label: "GitHub", href: "https://github.com/stanfordcs152/sp26-team-19" }],
+  },
+  {
+    title: "Heap Allocator & x86-64 Debugging",
+    course: "CS107 Computer Organization & Systems · Stanford",
+    bullets: [
+      "Implemented implicit and explicit free-list heap allocators (malloc, realloc, free) in C with block coalescing, in-place realloc, and a heap consistency checker; profiled instruction counts with callgrind.",
+      "Traced compiled x86-64 programs with gdb and objdump, reasoning about registers, stack frames, and calling conventions to recover program behavior without source code.",
+    ],
+    tags: ["C", "x86-64", "gdb", "Valgrind"],
   },
 ];
 
 const SKILL_GROUPS = [
   {
     title: "Languages",
-    items: ["Python", "C", "C++", "Rust", "TypeScript", "JavaScript", "SQL", "Bash"],
+    items: ["Python", "C", "C++", "Java", "TypeScript", "JavaScript", "SQL", "Bash", "x86-64 Assembly"],
   },
   {
     title: "Systems & Networking",
-    items: ["Linux", "Git", "Docker", "Make/CMake", "Valgrind", "Wireshark", "tcpdump", "Zeek", "Claude Code", "Cursor"],
+    items: ["Linux", "Git", "Docker", "Make/CMake", "gdb", "Valgrind", "Ghidra", "QEMU", "Cisco IOS", "iptables", "Wireshark", "tcpdump", "Zeek", "Claude Code", "Cursor"],
   },
   {
     title: "Data & ML",
-    items: ["BigQuery", "PyTorch", "pandas", "NumPy", "SciPy", "scikit-learn", "XGBoost", "Jupyter"],
+    items: ["BigQuery", "PyTorch", "pandas", "NumPy", "SciPy", "scikit-learn", "Weights & Biases", "Jupyter"],
   },
   {
     title: "Cloud & Web",
-    items: ["AWS (Lambda, S3)", "Azure", "Vertex AI", "Next.js", "React", "Supabase"],
+    items: ["AWS (Lambda, S3)", "GCP / Vertex AI", "Azure", "Next.js", "React", "Supabase"],
   },
 ];
 
@@ -607,9 +616,9 @@ function HomePage() {
             <SpotlightCard className="contact-card" spotlightColor="rgba(201, 138, 160, 0.16)">
               <h2>Let&apos;s connect</h2>
               <p>
-                I&apos;m looking for software engineering, ML, and research internships
-                on systems, security, and infrastructure teams, plus research
-                collaborations. Email is the best way to reach me.
+                I&apos;m looking for software engineering, security, ML, and research
+                internships for Summer 2027 or off-cycle terms, on systems, security,
+                and infrastructure teams. Email is the best way to reach me.
               </p>
               <div className="home-actions">
                 <a className="button-primary" href="mailto:victoriayang425@gmail.com">
