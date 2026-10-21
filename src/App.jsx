@@ -18,7 +18,7 @@ const NAV_LINKS = [
 
 const EDUCATION = {
   org: "Stanford University",
-  detail: "B.S. in Computer Science · Expected Jun 2028 (accelerated track, 90 quarter units completed)",
+  detail: "B.S. in Computer Science",
   gpa: "4.093 / 4.30",
   note: "Selected coursework:",
   courses: [
