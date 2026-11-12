@@ -1,0 +1,21 @@
+index.html
+  s_df327ac98455c8::t_9254f1c38bbf90 6
+public/favicon.svg
+  s_df327ac98455c8::t_9254f1c38bbf90 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "bed57071704de31f3fe96563aba513cb0dff1ed4",
+  "prompts": {},
+  "sessions": {
+    "s_df327ac98455c8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e1a56389-a154-44b0-9f81-bb88ee456665",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Victoria <71730718+rivacoit@users.noreply.github.com>"
+    }
+  }
+}
