@@ -1,0 +1,22 @@
+assets/NameField-DsDx73NB.js
+  h_1305187193789b 1-4318
+assets/index-Cm2IiffN.js
+  h_1305187193789b 1-2,4,7,9-12
+assets/index-X44cUKzv.css
+  h_1305187193789b 1
+assets/jsx-runtime-DWSWI4JT.js
+  h_1305187193789b 1
+index.html
+  h_1305187193789b 7,11,78-80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "fc602909d456559926c93b4cb2e44ee3cd4d751f",
+  "prompts": {},
+  "humans": {
+    "h_1305187193789b": {
+      "author": "Victoria <71730718+rivacoit@users.noreply.github.com>"
+    }
+  }
+}
