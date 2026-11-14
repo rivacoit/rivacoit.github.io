@@ -1,0 +1,23 @@
+assets/index-B7N99-py.js
+  s_3f67495956041c::t_3737f9ceef6625 9
+assets/index-BkA343Sg.css
+  s_3f67495956041c::t_8d7e056aae3bc2 1
+index.html
+  s_3f67495956041c::t_41310ac3d5ae67 77-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "868f50979a3fca59d3a67c2cae2d246212396387",
+  "prompts": {},
+  "sessions": {
+    "s_3f67495956041c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6628cf81-a21b-43d1-9986-7ff5d2e61c18",
+        "model": "unknown"
+      },
+      "human_author": "Victoria <71730718+rivacoit@users.noreply.github.com>"
+    }
+  }
+}
