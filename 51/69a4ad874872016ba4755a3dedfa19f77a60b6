@@ -1,0 +1,19 @@
+index.html
+  s_3f67495956041c::t_4e88702cbda441 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "5169a4ad874872016ba4755a3dedfa19f77a60b6",
+  "prompts": {},
+  "sessions": {
+    "s_3f67495956041c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6628cf81-a21b-43d1-9986-7ff5d2e61c18",
+        "model": "unknown"
+      },
+      "human_author": "Victoria <71730718+rivacoit@users.noreply.github.com>"
+    }
+  }
+}
