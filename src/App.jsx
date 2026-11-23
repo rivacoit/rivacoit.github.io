@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { Arrow, CopyEmail, GITHUB, LINKEDIN, Pill } from "./shared.jsx";
 
 /* ------------------------------------------------------------------ */
 /* Content                                                            */
 /* ------------------------------------------------------------------ */
-
-const EMAIL = "victoriayang425@gmail.com";
-const GITHUB = "https://github.com/rivacoit";
-const LINKEDIN = "https://www.linkedin.com/in/victoria-yang-96953b330/";
 
 // `tone` picks the pill color; each org keeps its color everywhere.
 const EXPERIENCE = [
@@ -144,58 +141,6 @@ const TOOLKIT = [
 /* ------------------------------------------------------------------ */
 /* Pieces                                                             */
 /* ------------------------------------------------------------------ */
-
-const ext = (href) => (/^https?:|\.pdf$/.test(href) ? { target: "_blank", rel: "noreferrer" } : {});
-
-// Hand-drawn swoop arrow for links (replaces the plain ↗).
-function Arrow() {
-  return (
-    <svg className="arrow-icon" viewBox="0 1 32 17" aria-hidden="true" focusable="false">
-      <path d="M3 10.5 C 3.8 13.5, 5.5 15.5, 9 15.5 C 16 15.5, 23 10.5, 29.5 3.8" />
-      <path d="M22.8 5.2 L 29.6 3.6 L 28.8 10.4" />
-    </svg>
-  );
-}
-
-function Pill({ href, children, variant = "outline" }) {
-  return (
-    <a className={`pill pill-${variant}`} href={href} {...ext(href)}>
-      {children}
-    </a>
-  );
-}
-
-// Email pill: shows the address; clicking copies it instead of opening a mail app.
-function CopyEmail({ variant }) {
-  const [copied, setCopied] = useState(false);
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(EMAIL);
-    } catch {
-      // Older browsers: fall back to a hidden textarea.
-      const t = document.createElement("textarea");
-      t.value = EMAIL;
-      document.body.appendChild(t);
-      t.select();
-      document.execCommand("copy");
-      t.remove();
-    }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-  return (
-    <button type="button" className={`pill pill-${variant}`} onClick={copy} aria-label={`Copy email address ${EMAIL}`}>
-      {EMAIL}
-      <span className="copy-mark" aria-hidden="true">
-        {copied ? "✓" : "⧉"}
-      </span>
-      <span className="sr-only" aria-live="polite">
-        {copied ? "Email address copied" : ""}
-      </span>
-    </button>
-  );
-}
-
 
 function Role({ item, open, onToggle }) {
   return (
@@ -424,6 +369,10 @@ export default function App() {
           <p className="hero-line">
             I study CS at Stanford and work on <mark>systems and security</mark>.
           </p>
+          <a className="latest" href="/writing/">
+            See what I’m up to
+            <Arrow />
+          </a>
           <div className="pill-row">
             <CopyEmail variant="solid" />
             <Pill href={GITHUB}>GitHub <Arrow /></Pill>

@@ -271,6 +271,23 @@ button:focus-visible {
   }
 }
 
+/* Link to the writing page, right under the tagline. */
+.latest {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: -6px 0 24px;
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+
+.latest:hover {
+  background: var(--butter);
+}
+
 /* ---------------------------------------------------------------- */
 /* Cards                                                            */
 /* ---------------------------------------------------------------- */
@@ -761,5 +778,266 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .fortune {
     animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Writing page (bento grid of posts)                               */
+/* ---------------------------------------------------------------- */
+
+.writing-title {
+  margin: 48px 0 28px;
+  font-size: clamp(64px, 12vw, 148px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.88;
+}
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.bento-wide {
+  grid-column: span 6;
+}
+
+.bento-half {
+  grid-column: span 3;
+}
+
+.bento-third {
+  grid-column: span 2;
+}
+
+.bento-tile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 240px;
+  padding: 28px;
+  border: var(--line);
+  border-radius: var(--radius-card);
+  text-decoration: none;
+  transition: box-shadow 120ms ease, transform 120ms ease;
+}
+
+.bento-tile:hover {
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: translate(-2px, -2px);
+}
+
+.bento-date {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.bento-title {
+  margin-top: auto;
+  padding-top: 40px;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.bento-subtitle {
+  margin-top: 10px;
+  max-width: 560px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.bento-arrow {
+  align-self: flex-end;
+  margin-top: 18px;
+  font-size: 22px;
+}
+
+.bento-third .bento-title {
+  font-size: clamp(26px, 3vw, 34px);
+}
+
+@media (max-width: 900px) {
+  .bento-third {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 640px) {
+  .writing-title {
+    margin: 32px 0 20px;
+  }
+
+  .bento {
+    grid-template-columns: 1fr;
+  }
+
+  .bento > li {
+    grid-column: auto;
+  }
+
+  .bento-tile {
+    min-height: 200px;
+    padding: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-tile {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Post pages                                                       */
+/* ---------------------------------------------------------------- */
+
+.post-page {
+  max-width: 760px;
+}
+
+.post-nav {
+  padding-top: 8px;
+}
+
+.post-header {
+  margin: 48px 0 40px;
+}
+
+.post-date {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.post-title {
+  margin-top: 10px;
+  font-size: clamp(44px, 8vw, 76px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.post-subtitle {
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: clamp(20px, 2.6vw, 24px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.post-body {
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.post-body p,
+.post-body ul,
+.post-body ol,
+.post-body pre {
+  margin: 0 0 1.15em;
+}
+
+.post-body h2 {
+  margin: 2.2em 0 0.6em;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.post-body ul {
+  padding-left: 1.3em;
+  list-style: disc;
+}
+
+.post-body ol {
+  padding-left: 1.4em;
+}
+
+.post-body li + li {
+  margin-top: 0.4em;
+}
+
+.post-body strong {
+  font-weight: 700;
+}
+
+.post-body a {
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.post-body a:hover {
+  background: var(--butter);
+}
+
+.post-body code {
+  padding: 0.12em 0.38em;
+  border-radius: 6px;
+  background: var(--soft);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.86em;
+}
+
+.post-body pre {
+  overflow-x: auto;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: var(--ink);
+  color: #f2f2f2;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.post-body pre code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+}
+
+.post-body img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: var(--line);
+  border-radius: 14px;
+}
+
+.post-footer {
+  margin-top: 56px;
+  padding-top: 28px;
+  border-top: var(--line);
+}
+
+.post-footer-line {
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 640px) {
+  .post-header {
+    margin: 32px 0 28px;
+  }
+
+  .post-body {
+    font-size: 17px;
+  }
+
+  .post-body h2 {
+    font-size: 24px;
+  }
+
+  .post-body pre {
+    margin-inline: -4px;
+    padding: 14px 16px;
+    font-size: 13.5px;
   }
 }
