@@ -1,0 +1,1 @@
+var e=[{href:`/writing/names-can-be-deceiving/`,title:`Names can be deceiving`,subtitle:`You can’t tell what a shell command does from its name`,date:`November 2026`,tone:`butter`,size:`half`,art:`nametag`}];export{e as t};
