@@ -1,7 +1,4 @@
-import { Component, lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { refreshMotion, scrollToElement, startMotion } from "./motion.js";
-
-const NameField = lazy(() => import("./NameField.jsx"));
+import { useEffect, useRef, useState } from "react";
 
 /* ------------------------------------------------------------------ */
 /* Content                                                            */
@@ -11,542 +8,522 @@ const EMAIL = "victoriayang425@gmail.com";
 const GITHUB = "https://github.com/rivacoit";
 const LINKEDIN = "https://www.linkedin.com/in/victoria-yang-96953b330/";
 
-// Matches the section titles below, in order.
-const NAV = [
-  { href: "#currently", label: "Currently" },
-  { href: "#experience", label: "Previously" },
-  { href: "#work", label: "Selected work" },
-  { href: "#education", label: "Education" },
-  { href: "#toolkit", label: "Toolkit" },
-];
-
-const CURRENTLY = [
-  {
-    id: "now-esrg",
-    org: "Stanford",
-    abbr: "ESRG",
-    since: "Since September 2026",
-    role: "Student Researcher, with Prof. Zakir Durumeric",
-    body: "Testing whether long-term trends in network telemetry can be detected automatically, using a year of Stanford campus Zeek logs (1B+ records, ~300 GB) in BigQuery.",
-  },
-  {
-    id: "now-ccdc",
-    org: "Stanford",
-    abbr: "CCDC",
-    since: "Since November 2025",
-    role: "Network Lead, Stanford Applied Cyber",
-    body: "Keeping scored services online under live red-team attack with Palo Alto firewalls, iptables, host hardening, and segmentation, plus an iptables audit tool I built. Western Regional Champion, 7th nationally. Before Stanford: four years of CyberPatriot, including 1st nationally in the 2025 Cisco Networking Challenge.",
-  },
-];
-
+// `tone` picks the pill color; each org keeps its color everywhere.
 const EXPERIENCE = [
   {
+    id: "esrg",
+    org: "Stanford Empirical Security Research Group",
+    role: "Student Researcher",
+    date: "Since Sep 2026",
+    tone: "mint",
+    bullets: [
+      "Working with Prof. Zakir Durumeric on whether we can automatically spot long-term trends in network traffic.",
+      "Right now that means digging through a year of Stanford’s campus Zeek logs (1B+ records, ~300 GB) in BigQuery to figure out which trends are worth automating.",
+    ],
+  },
+  {
+    id: "ccdc",
+    org: "Stanford Collegiate Cyber Defense Competition Team",
+    role: "Network Lead",
+    date: "Since Nov 2025",
+    tone: "butter",
+    bullets: [
+      "I run the network side of our defense: routers, switches, firewalls, host hardening, and segmentation, all while a live red team is trying to get in.",
+      "Also hunting for red-team access in packet captures and writing incident reports. I built a tool that summarizes iptables rules.",
+      "We won Western Regionals and placed 7th nationally.",
+      "Before Stanford: four years of CyberPatriot, including 1st nationally in the 2025 Cisco Networking Challenge.",
+    ],
+  },
+  {
     id: "socket",
-    date: "Jun – Sep 2026",
     org: "Socket",
     role: "Research Intern",
+    date: "Jun – Sep 2026",
+    tone: "aqua",
     bullets: [
-      "Built Socket's supply-chain malware benchmark from scratch: 7,000 reviewed, deduplicated packages across 15 ecosystems (up from 3), with a TypeScript CLI for collection, validation, scanning, and evaluation.",
-      "Turned production threat-feed detections, including false positives, into 1,267 test cases, and added sources for scanner disagreements and customer package usage.",
-      "Built a benchmark runner and Next.js dashboard, now used by the engineering team, comparing 10+ LLMs on recall, false positives, cost, and latency; showed a model the team planned to adopt underperformed similarly priced alternatives.",
+      "Built Socket’s supply-chain malware benchmark from scratch: 7,000 reviewed packages across 15 ecosystems (it covered 3 before), plus a TypeScript CLI to collect, validate, scan, and score them.",
+      "Turned real production detections, false positives included, into 1,267 test cases.",
+      "Built the dashboard the engineering team now uses to compare 10+ LLMs on recall, false positives, cost, and latency. It showed the model they were about to adopt did worse than others at the same price.",
     ],
   },
   {
     id: "deeptempo",
-    date: "Feb – Jun 2026",
     org: "DeepTempo",
     role: "Machine Learning Intern",
+    date: "Feb – Jun 2026",
+    tone: "pink",
     bullets: [
-      "Built a pipeline that generates labeled synthetic attack traffic for anomaly-detection models, fit to ~940K real Zeek flows across 5 MITRE ATT&CK techniques.",
-      "Modeled attacks as multi-phase sequences (brute force as spray → session → grind), matching the real flow-duration profile within 1 percentage point.",
-      "Merged MITRE technique data from 5 sources into one registry to ground attack specs in real adversary behavior.",
+      "Built a pipeline that generates labeled fake attack traffic for training anomaly detectors, fit to ~940K real Zeek flows across 5 MITRE ATT&CK techniques.",
+      "One distribution per attack didn’t fit the data, so I modeled attacks in phases (brute force is spray → session → grind) and matched the real flow-duration profile within 1 percentage point.",
+      "Merged MITRE data from 5 sources (ATT&CK, Caldera, Atomic Red Team, Attack Flow, CTID) into one registry, so the fake attacks follow what real adversaries do.",
     ],
   },
   {
     id: "yekola",
-    date: "Jun – Nov 2024",
     org: "Yekola",
     role: "Backend / AI Engineering Intern",
-    bullets: ["Built AWS Lambda and S3 backend services for a language-learning app covering 2,000+ African languages."],
+    date: "Jun – Nov 2024",
+    tone: "sky",
+    bullets: ["Built backend services (AWS Lambda, S3) for a language-learning app that covers 2,000+ African languages."],
   },
   {
     id: "cpp",
-    date: "Jun 2023 – Aug 2024",
     org: "Cal Poly Pomona",
     role: "Research & Software Engineering Intern",
+    date: "Jun 2023 – Aug 2024",
+    tone: "peach",
     bullets: [
-      "Built Lyrically Yours, a Flutter/Firebase app that recommends songs by matching how you feel to their lyrics.",
-      "Trained an emotion classifier on 16K sentences (89% accuracy); first-author paper at SNLP 2024, and first place at IgniteCS, GameGala, and the OC Science & Engineering Fair.",
+      "Built Lyrically Yours, an app that recommends songs by matching how you’re feeling to their lyrics.",
+      "Compared 4 emotion classifiers on 16K sentences (random forest won, 89% accuracy) and wrote it up as a first-author paper at SNLP 2024. It also took first at IgniteCS, GameGala, and the OC Science & Engineering Fair.",
     ],
   },
   {
     id: "cmu",
-    date: "Summer 2024",
-    org: "Carnegie Mellon University",
+    org: "Carnegie Mellon",
     role: "AI Research Intern",
-    bullets: ["Fine-tuned image-editing models on Azure GPUs for culturally appropriate visual storytelling."],
-  },
-  {
-    id: "google",
     date: "Summer 2024",
-    org: "Google",
-    role: "Career Exploration Intern",
-    bullets: ["Built pitch decks, financial models, and market research to inform strategic recommendations."],
+    tone: "lilac",
+    bullets: ["Fine-tuned image-editing models for culturally appropriate visual storytelling."],
   },
   {
-    id: "mit",
-    date: "Jul 2024",
-    org: "MIT Beaver Works Summer Institute",
-    role: "Cybersecurity Program",
-    bullets: ["Month-long program in IoT security and reverse engineering; analyzed binaries with Ghidra."],
-  },
-  {
-    id: "nontrivial",
-    date: "May 2024",
-    org: "Non-Trivial Fellowship",
-    role: "Research Fellow",
-    bullets: ["1 of 172 fellows from 11,583 applicants; researched how fiction shapes attitudes toward AI risk."],
+    id: "more",
+    org: "Google, MIT, Non-Trivial",
+    role: "Programs & fellowships",
+    date: "2024",
+    tone: "lime",
+    bullets: [
+      "Google, Career Exploration Intern: pitch decks, financial models, and market research for strategy recommendations.",
+      "MIT Beaver Works, Cybersecurity: a month of IoT security and reverse engineering binaries in Ghidra.",
+      "Non-Trivial Fellowship: 1 of 172 fellows out of 11,583 applicants. I researched how fiction shapes the way people think about AI risk.",
+    ],
   },
 ];
 
-const PROJECTS = [
+const WORK = [
   {
-    id: "work-cs229",
+    id: "cs229",
+    title: "Self-attention for weight evolution in dynamic graph networks",
     meta: "CS 229 · Paper",
-    title: "Replacing Recurrence with Self-Attention for Weight Evolution in Dynamic Graph Networks",
-    body: "Replaced EvolveGCN's GRU with a Transformer over past GCN weights. I built the model and pipeline and ran every experiment; Bitcoin-OTC micro-F1 rose from 0.699 to 0.783.",
-    image: { src: "/work/cs229.webp", alt: "First page of the CS 229 paper", kind: "paper" },
+    body: "We swapped EvolveGCN’s GRU for a Transformer that looks back over the GCN’s past weights. I built the model and pipeline and ran every experiment. Micro-F1 on Bitcoin-OTC went from 0.699 to 0.783.",
+    image: { src: "/work/cs229.webp", alt: "First page of the CS 229 paper", width: 900, height: 737 },
     links: [{ label: "Read the paper", href: "/cs229-paper.pdf" }],
   },
   {
-    id: "work-jobshield",
+    id: "jobshield",
+    title: "JobShield: catching fake job postings",
     meta: "CS 152 · Poster",
-    title: "JobShield: Detecting Fraudulent Job Postings",
-    body: "Rules plus Gemini, with moderator decisions fed back as few-shot examples: 0.91 F1 and 0.95 fraud recall at 4.5× lower cost than LLM-only. I led ML and backend on a five-person team.",
-    image: { src: "/work/jobshield.webp", alt: "JobShield research poster", kind: "poster" },
+    body: "Rules plus Gemini, and every moderator decision gets fed back in as a few-shot example. 0.91 F1 and 0.95 fraud recall at 4.5× lower cost than the LLM alone. I led ML and backend on a team of five.",
+    image: { src: "/work/jobshield.webp", alt: "JobShield research poster", width: 1200, height: 866 },
     links: [
-      { label: "View the poster", href: "/jobshield-poster.pdf" },
-      { label: "GitHub", href: "https://github.com/stanfordcs152/sp26-team-19" },
+      { label: "Poster", href: "/jobshield-poster.pdf" },
+      { label: "Code", href: "https://github.com/stanfordcs152/sp26-team-19" },
     ],
   },
-  {
-    id: "work-cs107",
-    meta: "CS 107 · Systems",
-    title: "Heap Allocator & x86-64 Debugging",
-    body: "Free-list heap allocators in C with coalescing and in-place realloc; traced compiled x86-64 with gdb to recover behavior without source.",
-  },
 ];
 
-const EDUCATION = {
-  school: "Stanford University",
-  degree: "B.S. Computer Science",
-  gpa: "GPA 4.093 / 4.30",
-  // Summaries condensed from the Stanford course catalog (explorecourses.stanford.edu).
-  courses: [
-    { id: "cs111", code: "CS 111", name: "Operating Systems Principles", now: true, desc: "Concurrency, synchronization, scheduling, processes, virtual memory, I/O, file systems, and protection." },
-    { id: "cs251", code: "CS 251", name: "Cryptocurrencies & Blockchain", now: true, desc: "How cryptocurrencies, blockchains, and distributed consensus work, and how to engineer secure software that interacts with them." },
-    { id: "cs107", code: "CS 107", name: "Computer Organization & Systems", desc: "How computers execute programs, from C down to the microprocessor: data representation, machine-level code, memory management, and performance." },
-    { id: "cs152", code: "CS 152", name: "Trust & Safety", desc: "How online services and AI systems are abused to cause real harm, from fraud to misinformation, and the technical, product, and policy responses." },
-    { id: "cs229", code: "CS 229", name: "Machine Learning", desc: "Supervised and unsupervised learning, kernel methods, deep learning, learning theory, and reinforcement learning." },
-    { id: "cs109", code: "CS 109", name: "Probability for Computer Scientists", desc: "Combinatorics, random variables, distributions, expectation, and estimation, applied to machine learning and algorithm analysis." },
-    { id: "cs103", code: "CS 103", name: "Mathematical Foundations of Computing", desc: "Proofs, logic, discrete math, computability, and complexity: the theoretical limits of what computers can solve." },
-    { id: "cs106b", code: "CS 106B", name: "Programming Abstractions", desc: "Data abstraction, recursion, and fundamental data structures in C++, with an introduction to complexity analysis." },
-    { id: "math104", code: "MATH 104", name: "Applied Matrix Theory", desc: "Orthogonality, spectral theory, the SVD and QR decompositions, and least squares, with applications to data analysis." },
-    { id: "math51", code: "MATH 51", name: "Linear Algebra & Multivariable Calculus", desc: "Linear algebra and multivariable calculus together: eigenvalues, least squares, the SVD, gradients, and optimization." },
-  ],
-};
+const COURSES = [
+  { code: "CS 111", name: "Operating Systems Principles", now: true },
+  { code: "CS 251", name: "Cryptocurrencies & Blockchain", now: true },
+  { code: "CS 107", name: "Computer Organization & Systems" },
+  { code: "CS 152", name: "Trust & Safety" },
+  { code: "CS 229", name: "Machine Learning" },
+  { code: "CS 109", name: "Probability for Computer Scientists" },
+  { code: "CS 103", name: "Mathematical Foundations of Computing" },
+  { code: "CS 106B", name: "Programming Abstractions" },
+  { code: "MATH 104", name: "Applied Matrix Theory" },
+  { code: "MATH 51", name: "Linear Algebra & Multivariable Calculus" },
+];
 
 const TOOLKIT = [
-  { title: "Languages", items: "Python, C, C++, Java, TypeScript, JavaScript, SQL, Bash, x86-64 assembly" },
-  {
-    title: "Systems & networking",
-    items: "Linux, Git, Docker, Make/CMake, gdb, Valgrind, Ghidra, QEMU, Palo Alto, iptables, Cisco IOS, Wireshark, tcpdump, Zeek",
-  },
-  { title: "Data & ML", items: "BigQuery, PyTorch, pandas, NumPy, SciPy, scikit-learn, Weights & Biases, Jupyter" },
-  { title: "Cloud & web", items: "AWS (Lambda, S3), GCP / Vertex AI, Azure, Next.js, React, Supabase" },
-];
-
-const CONTACT = [
-  { meta: "Write", label: "Email", href: `mailto:${EMAIL}`, external: false },
-  { meta: "Code", label: "GitHub", href: GITHUB, external: true },
-  { meta: "Connect", label: "LinkedIn", href: LINKEDIN, external: true },
+  { title: "Languages", items: ["C", "C++", "Python", "Java", "TypeScript", "JavaScript", "SQL", "Bash"] },
+  { title: "Systems & security", items: ["Linux", "gdb", "Ghidra", "objdump", "strace", "Valgrind", "Docker", "Git"] },
+  { title: "Networking", items: ["TCP/IP", "DNS", "TLS", "Cisco IOS", "iptables", "Wireshark", "tcpdump", "Zeek"] },
+  { title: "Data & web", items: ["BigQuery", "pandas", "AWS (Lambda, S3)", "Next.js", "React"] },
 ];
 
 /* ------------------------------------------------------------------ */
-/* Helpers                                                            */
+/* Pieces                                                             */
 /* ------------------------------------------------------------------ */
 
+const ext = (href) => (/^https?:|\.pdf$/.test(href) ? { target: "_blank", rel: "noreferrer" } : {});
+
+// Hand-drawn swoop arrow for links (replaces the plain ↗).
 function Arrow() {
   return (
-    <svg className="arrow" viewBox="0 0 12 12" aria-hidden="true">
-      <path d="M2 10 L10 2 M3.5 2 L10 2 L10 8.5" fill="none" stroke="currentColor" strokeWidth="1" />
+    <svg className="arrow-icon" viewBox="0 1 32 17" aria-hidden="true" focusable="false">
+      <path d="M3 10.5 C 3.8 13.5, 5.5 15.5, 9 15.5 C 16 15.5, 23 10.5, 29.5 3.8" />
+      <path d="M22.8 5.2 L 29.6 3.6 L 28.8 10.4" />
     </svg>
   );
 }
 
-class GLBoundary extends Component {
-  state = { failed: false };
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  componentDidCatch() {
-    this.props.onFail();
-  }
-  render() {
-    return this.state.failed ? null : this.props.children;
-  }
-}
-
-function Section({ id, num, title, children }) {
+function Pill({ href, children, variant = "outline" }) {
   return (
-    <section id={id} className="section">
-      <div className="wrap">
-        <header className="section-head">
-          <span className="section-num">({num})</span>
-          <h2 className="section-title">
-            <span className="title-mask">
-              <span className="title-inner">{title}</span>
-            </span>
-          </h2>
-          <span className="rule head-rule" aria-hidden="true" />
-        </header>
-        <div className="section-body">{children}</div>
-      </div>
-    </section>
+    <a className={`pill pill-${variant}`} href={href} {...ext(href)}>
+      {children}
+    </a>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Cover                                                              */
-/* ------------------------------------------------------------------ */
-
-function Cover() {
-  const [gl, setGl] = useState("pending");
-  const onReady = useCallback(() => setGl("ready"), []);
-  const onFail = useCallback(() => setGl("failed"), []);
-  const cover = useRef(null);
-
+// Email pill: shows the address; clicking copies it instead of opening a mail app.
+function CopyEmail({ variant }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+    } catch {
+      // Older browsers: fall back to a hidden textarea.
+      const t = document.createElement("textarea");
+      t.value = EMAIL;
+      document.body.appendChild(t);
+      t.select();
+      document.execCommand("copy");
+      t.remove();
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
   return (
-    <header ref={cover} className={`cover is-gl-${gl}`} id="top">
-      <GLBoundary onFail={onFail}>
-        <Suspense fallback={null}>
-          <NameField coverRef={cover} onReady={onReady} />
-        </Suspense>
-      </GLBoundary>
-
-      <div className="wrap cover-wrap">
-        <div className="topbar">
-          <a className="monogram" href="#top" aria-label="Victoria Yang, back to top">
-            V·Y
-          </a>
-          <nav className="topbar-nav" aria-label="Sections">
-            {NAV.map((l) => (
-              <a key={l.href} href={l.href}>
-                {l.label}
-              </a>
-            ))}
-          </nav>
-          <a className="pill" href="#contact">
-            Get in touch
-          </a>
-          <span className="rule topbar-rule" aria-hidden="true" />
-        </div>
-
-        <div className="masthead">
-          <h1 className="mast-name">
-            <span className="mast-line">
-              <span data-text>Victoria</span>
-              <i className="baseline-probe" aria-hidden="true" />
-            </span>
-            <span className="mast-line mast-last">
-              <em data-text>Yang</em>
-              <i className="baseline-probe" aria-hidden="true" />
-            </span>
-          </h1>
-          <div className="intro">
-            <p className="tagline">
-              <span className="tagline-lead">Hi! I&rsquo;m studying computer science at Stanford.</span> I&rsquo;m curious
-              about how systems work underneath and how to keep them secure, from networks and operating systems to the
-              infrastructure AI runs on. If you work in this space, <a href="#contact">reach out</a> :)
-            </p>
-          </div>
-        </div>
-      </div>
-    </header>
+    <button type="button" className={`pill pill-${variant}`} onClick={copy} aria-label={`Copy email address ${EMAIL}`}>
+      {EMAIL}
+      <span className="copy-mark" aria-hidden="true">
+        {copied ? "✓" : "⧉"}
+      </span>
+      <span className="sr-only" aria-live="polite">
+        {copied ? "Email address copied" : ""}
+      </span>
+    </button>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Sections                                                           */
-/* ------------------------------------------------------------------ */
 
-function Currently() {
+function Role({ item, open, onToggle }) {
   return (
-    <div className="now-grid">
-      {CURRENTLY.map((c) => (
-        <article key={c.id} id={c.id} className="now-item rv">
-          <p className="now-meta">{c.since}</p>
-          <h3 className="now-title">
-            {c.org} <em>{c.abbr}</em>
-          </h3>
-          <p className="now-role">{c.role}</p>
-          <p className="now-body">{c.body}</p>
-        </article>
-      ))}
-    </div>
+    <li className={`role tone-${item.tone}${open ? " is-open" : ""}`}>
+      <button type="button" className="role-head" aria-expanded={open} aria-controls={`role-${item.id}`} onClick={onToggle}>
+        <span className="role-org">{item.org}</span>
+        <span className="role-meta">
+          <span>
+            {item.role} · {item.date}
+          </span>
+          <span className="role-icon" aria-hidden="true">
+            {open ? "−" : "+"}
+          </span>
+        </span>
+      </button>
+      {open && (
+        <ul className="role-body" id={`role-${item.id}`}>
+          {item.bullets.map((b) => (
+            <li key={b}>{b}</li>
+          ))}
+        </ul>
+      )}
+    </li>
   );
 }
 
-function Experience({ open, onToggle }) {
-  return (
-    <ol className="exp-list">
-      {EXPERIENCE.map((x, i) => {
-        const isOpen = open === x.id;
-        return (
-          <li key={x.id} id={`exp-${x.id}`} className={`exp-row rv${isOpen ? " is-open" : ""}`}>
-            <button
-              type="button"
-              className="exp-head"
-              aria-expanded={isOpen}
-              aria-controls={`exp-${x.id}-body`}
-              onClick={() => onToggle(isOpen ? null : x.id)}
-            >
-              <span className="exp-num">{String(i + 1).padStart(2, "0")}</span>
-              <span className="exp-org">{x.org}</span>
-              <span className="exp-role">{x.role}</span>
-              <span className="exp-date">{x.date}</span>
-              <span className="exp-icon" aria-hidden="true" />
-            </button>
-            <div className="exp-body" id={`exp-${x.id}-body`} aria-hidden={!isOpen}>
-              <div className="exp-body-inner">
-                <ul>
-                  {x.bullets.map((b, j) => (
-                    <li key={j}>{b}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </li>
-        );
-      })}
-    </ol>
-  );
-}
+// Balloons drifting up the empty side margins (wide screens only; see CSS).
+const STRINGS = [
+  "M50 123 C 40 140, 62 150, 52 168 C 44 182, 40 196, 50 210 C 54 216, 60 214, 58 208",
+  "M50 123 C 58 142, 38 156, 46 176 C 52 190, 64 198, 58 214",
+  "M50 123 C 44 138, 60 146, 56 162 C 52 178, 36 186, 40 204 C 42 212, 48 214, 50 210",
+];
+const BODY = "M50 6 C 22 6, 6 28, 6 54 C 6 82, 30 104, 50 112 C 70 104, 94 82, 94 54 C 94 28, 78 6, 50 6 Z";
 
-function HeapDrawing() {
-  return (
-    <svg viewBox="0 0 320 240" className="heap-svg" aria-hidden="true">
-      <rect x="20" y="104" width="280" height="48" fill="none" stroke="currentColor" />
-      <g fill="currentColor">
-        <rect x="20" y="104" width="8" height="48" />
-        <rect x="84" y="104" width="8" height="48" />
-        <rect x="132" y="104" width="8" height="48" />
-        <rect x="172" y="104" width="8" height="48" />
-        <rect x="252" y="104" width="8" height="48" />
-      </g>
-      <g fill="#4a423a">
-        <rect x="28" y="104" width="56" height="48" />
-        <rect x="140" y="104" width="32" height="48" />
-        <rect x="260" y="104" width="40" height="48" />
-      </g>
-      <rect x="180" y="104" width="72" height="48" fill="#e3a35b" />
-      <path d="M112 104 C 112 70, 216 70, 216 104" fill="none" stroke="currentColor" />
-      <polyline points="212,98 216,104 220,98" fill="none" stroke="currentColor" />
-      <g className="heap-labels">
-        <text x="20" y="40">heap · explicit free list</text>
-        <text x="36" y="174">alloc</text>
-        <text x="98" y="174">free</text>
-        <text x="186" y="174">coalesced</text>
-      </g>
-    </svg>
-  );
-}
+// side, x (0-1 across the margin), color, string, mirror string, duration (s), delay (s, negative = already mid-flight)
+const BALLOONS = [
+  ["left", 0.2, "rose", 0, false, 24, -3],
+  ["left", 0.75, "butter", 1, true, 27, -12],
+  ["left", 0.4, "aqua", 2, false, 25, -20],
+  ["right", 0.25, "lilac", 1, false, 26, -8],
+  ["right", 0.75, "mint", 2, true, 23, -16],
+  ["right", 0.45, "peach", 0, true, 28, -1],
+];
 
-function Work() {
-  return (
-    <div className="work-grid">
-      {PROJECTS.map((p) => (
-        <article key={p.id} id={p.id} className="work-card rv">
-          {p.image ? (
-            <a className={`work-figure is-${p.image.kind}`} href={p.links[0].href} target="_blank" rel="noreferrer" tabIndex={-1}>
-              <span className="work-shift">
-                <img src={p.image.src} alt={p.image.alt} loading="lazy" />
-              </span>
-            </a>
-          ) : (
-            <div className="work-figure is-drawing">
-              <span className="work-shift">
-                <HeapDrawing />
-              </span>
-            </div>
-          )}
-          <p className="work-meta">{p.meta}</p>
-          <h3 className="work-title">{p.title}</h3>
-          <p className="work-body">{p.body}</p>
-          {p.links && (
-            <p className="work-links">
-              {p.links.map((l) => (
-                <a key={l.href} href={l.href} target="_blank" rel="noreferrer">
-                  {l.label}
-                  <Arrow />
-                </a>
-              ))}
-            </p>
-          )}
-        </article>
-      ))}
-    </div>
-  );
-}
+// Click a balloon, get a fortune.
+const FORTUNES = [
+  "A good surprise is floating your way.",
+  "Your next bug will be an easy one.",
+  "Someone is really glad you stopped by today.",
+  "Drink some water. Future you says thanks.",
+  "Your code will compile on the first try. (Probably.)",
+  "Good things come to those who git pull.",
+  "You will find the semicolon you were missing.",
+  "A nap is in your near future.",
+  "Your tests will pass, and so will this week.",
+  "Today is a great day to be a little bit silly.",
+  "The firewall is on your side.",
+  "You are someone’s favorite person to talk to.",
+  "A friend will send you a very good meme.",
+  "Snacks are coming. Be ready.",
+  "Your hard work is about to pay off.",
+  "You will be brave in a small way today.",
+  "Something you’ve been waiting for is almost here.",
+  "The red team will not get in.",
+  "Take the scenic route. It’s worth it.",
+  "Your plants are proud of you.",
+  "You deserve a little treat.",
+  "Happiness is a warm drink and zero merge conflicts.",
+  "You have excellent taste in websites.",
+  "You will get a really good night’s sleep soon.",
+  "Someone is going to compliment your outfit.",
+  "A small win is coming. Celebrate it anyway.",
+  "Your favorite song will come on at the perfect moment.",
+  "The bug was a typo. It’s always a typo.",
+  "Someone out there is rooting for you.",
+  "Your future self is very proud of you.",
+  "Every green light is yours today.",
+  "You will laugh so hard you snort.",
+  "A great idea will find you in the shower.",
+  "Your next coffee will be exactly right.",
+  "You’re doing better than you think.",
+  "Rest is productive too.",
+  "Good news is on its way. Check your email.",
+  "Your segfault will be easy to find.",
+  "Today you will be someone’s sunshine.",
+  "Something sweet is coming your way. Maybe literally.",
+  "Your network logs will make sense.",
+  "Valgrind will come back clean.",
+  "You have enough tokens.",
+  "Reviewer 2 will be nice to you.",
+  "Your model will generalize.",
+  "Your false positive rate will go down. Your happiness will go up.",
+  "You will free() what you malloc().",
+  "Your pull request will be approved on the first try.",
+  "Your gdb breakpoint will land exactly where the bug is.",
+  "Check the pointer. It’s null.",
+];
 
-function Education() {
-  const [open, setOpen] = useState(null);
+const luckyNumbers = () => {
+  const picks = new Set();
+  while (picks.size < 5) picks.add(1 + Math.floor(Math.random() * 60));
+  return [...picks].sort((a, b) => a - b).join("  ");
+};
+
+// Random starting point, picked once per page load.
+const FIRST_FORTUNE = Math.floor(Math.random() * FORTUNES.length);
+
+function Balloons() {
+  const [note, setNote] = useState(null);
+  const next = useRef(FIRST_FORTUNE);
+  const timer = useRef(0);
+
+  useEffect(() => {
+    if (!note) return;
+    const onKey = (e) => e.key === "Escape" && setNote(null);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [note]);
+
+  const open = (e) => {
+    const text = FORTUNES[next.current];
+    // Walk through the list from a random start so nobody sees a repeat for a while.
+    next.current = (next.current + 1 + Math.floor(Math.random() * 3)) % FORTUNES.length;
+    // Keyboard presses have no pointer position, so use the balloon's middle.
+    const box = e.currentTarget.getBoundingClientRect();
+    const px = e.detail ? e.clientX : box.left + box.width / 2;
+    const py = e.detail ? e.clientY : box.top + box.width / 2;
+    const w = 240;
+    const x = Math.min(Math.max(px - w / 2, 12), window.innerWidth - w - 12);
+    const y = Math.min(Math.max(py - 40, 12), window.innerHeight - 120);
+    setNote({ text, numbers: luckyNumbers(), x, y, key: Date.now() });
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setNote(null), 5000);
+  };
+
   return (
     <>
-      <div className="edu-head rv">
-        <h3 className="edu-school">
-          {EDUCATION.school} <span>· {EDUCATION.degree}</span>
-        </h3>
-        <p className="edu-gpa">{EDUCATION.gpa}</p>
+      <div className="balloons">
+        {BALLOONS.map(([side, x, color, string, mirror, dur, delay], i) => (
+          <button
+            type="button"
+            key={i}
+            className={`balloon balloon-${side}`}
+            style={{ "--x": x, "--c": `var(--${color})`, animationDuration: `${dur}s`, animationDelay: `${delay}s` }}
+            onClick={open}
+            aria-label="Balloon: open a fortune"
+          >
+            <svg viewBox="0 0 100 230" className="balloon-svg" aria-hidden="true" focusable="false">
+              <defs>
+                <clipPath id={`balloon-clip-${i}`}>
+                  <path d={BODY} />
+                </clipPath>
+              </defs>
+              <path
+                d={STRINGS[string]}
+                transform={mirror ? "translate(100 0) scale(-1 1)" : undefined}
+                fill="none"
+                stroke="#111"
+                strokeWidth="5"
+                strokeLinecap="round"
+              />
+              {/* Darker underside, then the main color on top, offset up-left. */}
+              <path className="b-shade" d={BODY} />
+              <circle className="b-base" cx="43" cy="45" r="51" clipPath={`url(#balloon-clip-${i})`} />
+              <path d={BODY} fill="none" stroke="#111" strokeWidth="5" />
+              <ellipse cx="31" cy="29" rx="10" ry="6.5" fill="#fff" transform="rotate(-40 31 29)" />
+              <ellipse cx="21" cy="46" rx="4.5" ry="7" fill="#fff" transform="rotate(-20 21 46)" />
+              <path
+                className="b-shade"
+                d="M50 110 C 44 114, 38 118, 39 124 C 45 121, 55 121, 61 124 C 62 118, 56 114, 50 110 Z"
+                stroke="#111"
+                strokeWidth="4.5"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        ))}
       </div>
-      <ul className="course-grid">
-        {EDUCATION.courses.map((c) => {
-          const isOpen = open === c.id;
-          return (
-            <li key={c.id} className={`course rv${isOpen ? " is-open" : ""}`}>
-              <button
-                type="button"
-                className="course-head"
-                aria-expanded={isOpen}
-                aria-controls={`course-${c.id}`}
-                onClick={() => setOpen(isOpen ? null : c.id)}
-              >
-                <span className="course-id">{c.code}</span>
-                <span className="course-name">
-                  {c.name}
-                  {c.now && <span className="course-now">Now</span>}
-                </span>
-                <span className="exp-icon" aria-hidden="true" />
-              </button>
-              <div className="course-body" id={`course-${c.id}`} aria-hidden={!isOpen}>
-                <div className="course-inner">
-                  <p>{c.desc}</p>
-                </div>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+      <p className="sr-only" role="status">
+        {note ? `Your fortune: ${note.text}` : ""}
+      </p>
+      {note && (
+        <button
+          type="button"
+          key={note.key}
+          className="fortune"
+          style={{ left: note.x, top: note.y }}
+          onClick={() => setNote(null)}
+          aria-label="Close fortune"
+        >
+          <span className="fortune-text">{note.text}</span>
+          <span className="fortune-lucky">Lucky numbers {note.numbers}</span>
+        </button>
+      )}
     </>
   );
 }
 
-function Toolkit() {
-  return (
-    <div className="tool-grid">
-      {TOOLKIT.map((g) => (
-        <div key={g.title} className="tool-col rv">
-          <h3 className="tool-title">{g.title}</h3>
-          <p className="tool-items">{g.items}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function Contact() {
-  return (
-    <section id="contact" className="contact">
-      <div className="wrap">
-        <div className="contact-mast">
-          <span className="section-num">(06)</span>
-          <h2 className="mast-name contact-name">
-            Let&rsquo;s <em>talk</em>
-          </h2>
-        </div>
-        <div className="index contact-index">
-          <span className="rule index-rule" aria-hidden="true" />
-          <p className="index-cell index-static rv">
-            <span className="index-meta">
-              <span>Open to</span>
-            </span>
-            <span className="index-desc">Off-cycle roles on security and infrastructure teams.</span>
-          </p>
-          {CONTACT.map((c) => (
-            <a key={c.label} className="index-cell rv" href={c.href} {...(c.external ? { target: "_blank", rel: "noreferrer" } : {})}>
-              <span className="index-meta">
-                <span>{c.meta}</span>
-                <Arrow />
-              </span>
-              <span className="index-title">{c.label}</span>
-            </a>
-          ))}
-        </div>
-        <footer className="footer rv">
-          <span>© 2026 Victoria Yang</span>
-          <a href="#top">Back to top ↑</a>
-        </footer>
-      </div>
-    </section>
-  );
-}
-
 /* ------------------------------------------------------------------ */
-/* App                                                                */
+/* Page                                                               */
 /* ------------------------------------------------------------------ */
 
 export default function App() {
-  const [openExp, setOpenExp] = useState(() => {
-    const hash = window.location.hash.slice(1);
-    const match = EXPERIENCE.find((x) => `exp-${x.id}` === hash);
-    return match ? match.id : "socket";
-  });
-
-  const toggleExp = useCallback((id) => {
-    setOpenExp(id);
-    // The row animates open; re-measure scroll positions once it settles.
-    setTimeout(refreshMotion, 500);
-  }, []);
-
-  // Deep links (#exp-socket etc.) land on their entry.
-  useEffect(() => {
-    const id = window.location.hash.slice(1);
-    const el = id && document.getElementById(id);
-    if (el) setTimeout(() => scrollToElement(el), 300);
-  }, []);
-
-  const root = useRef(null);
-  useLayoutEffect(() => startMotion(root.current), []);
+  const [open, setOpen] = useState(() => new Set());
+  const toggle = (id) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   return (
-    <div ref={root}>
-      <Cover />
-      <main>
-        <Section id="currently" num="01" title="Currently">
-          <Currently />
-        </Section>
-        <Section id="experience" num="02" title="Previously">
-          <Experience open={openExp} onToggle={toggleExp} />
-        </Section>
-        <Section
-          id="work"
-          num="03"
-          title={
-            <>
-              Selected <em>work</em>
-            </>
-          }
-        >
-          <Work />
-        </Section>
-        <Section id="education" num="04" title="Education">
-          <Education />
-        </Section>
-        <Section id="toolkit" num="05" title="Toolkit">
-          <Toolkit />
-        </Section>
+    <>
+    <div className="page" id="top">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
+      <section className="hero">
+        <div className="hero-text">
+          <h1 className="hero-name">
+            Victoria
+            <br />
+            Yang
+          </h1>
+          <p className="hero-line">
+            I study CS at Stanford and work on <mark>systems and security</mark>.
+          </p>
+          <div className="pill-row">
+            <CopyEmail variant="solid" />
+            <Pill href={GITHUB}>GitHub <Arrow /></Pill>
+            <Pill href={LINKEDIN}>LinkedIn <Arrow /></Pill>
+          </div>
+        </div>
+        <div className="hero-badge">
+          <img className="badge-main" src="/badge.webp" alt="Victoria Yang" width="380" height="380" fetchPriority="high" />
+          {/* Hover swaps in a photo where I'm smiling more. */}
+          <img className="badge-smile" src="/badge-smile.webp" alt="" aria-hidden="true" width="380" height="380" />
+        </div>
+      </section>
+
+      <main id="main">
+        <section className="card" id="experience">
+          <h2 className="card-title">Experience</h2>
+          <ul className="roles">
+            {EXPERIENCE.map((x) => (
+              <Role key={x.id} item={x} open={open.has(x.id)} onToggle={() => toggle(x.id)} />
+            ))}
+          </ul>
+        </section>
+
+        <section className="card" id="work">
+          <h2 className="card-title">Selected work</h2>
+          <div className="work-grid">
+            {WORK.map((w) => (
+              <article key={w.id} className="work">
+                <div className="work-figure">
+                  <img src={w.image.src} alt={w.image.alt} width={w.image.width} height={w.image.height} loading="lazy" />
+                </div>
+                <p className="work-meta">{w.meta}</p>
+                <h3 className="work-title">{w.title}</h3>
+                <p className="work-body">{w.body}</p>
+                {w.links && (
+                  <div className="pill-row">
+                    {w.links.map((l) => (
+                      <Pill key={l.href} href={l.href} variant="small">
+                        {l.label} <Arrow />
+                      </Pill>
+                    ))}
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <div className="split">
+          <section className="card" id="education">
+            <h2 className="card-title">Education</h2>
+            <p className="school">Stanford University</p>
+            <p className="degree">B.S. Computer Science</p>
+            <ul className="chips">
+              {COURSES.map((c) => (
+                <li key={c.code} className={`chip${c.now ? " is-now" : ""}`} title={c.name}>
+                  {c.code} · {c.name}
+                  {c.now && " · now"}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="card" id="toolkit">
+            <h2 className="card-title">Toolkit</h2>
+            {TOOLKIT.map((g) => (
+              <div key={g.title} className="tool-group">
+                <h3 className="group-label">{g.title}</h3>
+                <ul className="chips">
+                  {g.items.map((t) => (
+                    <li key={t} className="chip">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </section>
+        </div>
       </main>
-      <Contact />
+
+      <footer className="contact" id="contact">
+        <h2 className="contact-title">Let&rsquo;s talk</h2>
+        <p className="contact-line">Always down to talk security, systems, or whatever you’re working on. Also open to off-cycle roles on security and infra teams.</p>
+        <div className="pill-row">
+          <CopyEmail variant="pink" />
+          <Pill href={GITHUB} variant="ghost">
+            GitHub <Arrow />
+          </Pill>
+          <Pill href={LINKEDIN} variant="ghost">
+            LinkedIn <Arrow />
+          </Pill>
+        </div>
+        <div className="footer">
+          <span>© 2026 Victoria Yang</span>
+          <a href="#top">Back to top ↑</a>
+        </div>
+      </footer>
     </div>
+      <Balloons />
+    </>
   );
 }

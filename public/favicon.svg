@@ -1,11 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <style>
-    .m { fill: #c4843a; stroke: #c4843a; }
-    @media (prefers-color-scheme: dark) { .m { fill: #e3a35b; stroke: #e3a35b; } }
-  </style>
-  <g class="m">
-    <circle cx="23" cy="23" r="5" stroke="none" />
-    <circle cx="23" cy="41" r="5" stroke="none" />
-    <path d="M37 11 C50 21 50 43 37 53" fill="none" stroke-width="6" stroke-linecap="round" />
+  <polygon points="32.00,2.40 37.61,7.43 44.84,5.33 47.71,12.30 55.14,13.54 54.70,21.07 60.86,25.41 57.20,32.00 60.86,38.59 54.70,42.93 55.14,50.46 47.71,51.70 44.84,58.67 37.61,56.57 32.00,61.60 26.39,56.57 19.16,58.67 16.29,51.70 8.86,50.46 9.30,42.93 3.14,38.59 6.80,32.00 3.14,25.41 9.30,21.07 8.86,13.54 16.29,12.30 19.16,5.33 26.39,7.43" fill="#e7639a" stroke="#111111" stroke-width="2.5" stroke-linejoin="round" />
+  <g fill="#111111">
+    <circle cx="24" cy="24" r="4.6" />
+    <circle cx="24" cy="40" r="4.6" />
   </g>
+  <path d="M36 14 C48 23 48 41 36 50" fill="none" stroke="#111111" stroke-width="5.5" stroke-linecap="round" />
 </svg>
