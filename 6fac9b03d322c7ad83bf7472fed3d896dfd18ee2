@@ -1,0 +1,23 @@
+assets/index-9K3-yj9S.js
+  s_3f67495956041c::t_388acb6db03605 1,3,6,8-9
+assets/index-mLqhrJUl.css
+  s_3f67495956041c::t_ec7a0c11952896 1
+index.html
+  s_3f67495956041c::t_088d28140381cc 77-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "6fac9b03d322c7ad83bf7472fed3d896dfd18ee2",
+  "prompts": {},
+  "sessions": {
+    "s_3f67495956041c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6628cf81-a21b-43d1-9986-7ff5d2e61c18",
+        "model": "unknown"
+      },
+      "human_author": "Victoria <71730718+rivacoit@users.noreply.github.com>"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+favicon.svg
+  h_1305187193789b 1-11
+index.html
+  h_1305187193789b 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "06659dbb18643f58e6fd18faf7628eb0636e0739",
+  "prompts": {},
+  "humans": {
+    "h_1305187193789b": {
+      "author": "Victoria <71730718+rivacoit@users.noreply.github.com>"
+    }
+  }
+}
