@@ -10,7 +10,7 @@ I wanted to see how big that gap is in practice, so I ran five ordinary commands
 
 ## The setup
 
-try, from Konstantinos Kallas and collaborators, runs a command inside a Linux overlay filesystem. The command sees your real files, but every write lands in a scratch layer instead. When the command finishes, try lists exactly what changed and asks whether to keep it.
+[try](https://github.com/binpash/try), from Konstantinos Kallas and collaborators, runs a command inside a Linux overlay filesystem. The command sees your real files, but every write lands in a scratch layer instead. When the command finishes, try lists exactly what changed and asks whether to keep it.
 
 I was really drawn to the elegant approach of try. try uses Linux user namespaces, so it doesn't need root. The scratch layer only stores differences, so it's cheap. Even deletions are just markers. When a command deletes a file, the overlay leaves a special "whiteout" entry with the same name that hides the real file, and the real file is never touched. You can open the scratch folder and see every change as a plain file. It's super interesting to see every layer and exactly what it does!
 
