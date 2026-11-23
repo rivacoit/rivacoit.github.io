@@ -1,0 +1,26 @@
+assets/main-DCZbiMvq.js
+  h_1305187193789b 1
+assets/names-can-be-deceiving-D41S2CBy.js
+  h_1305187193789b 1
+assets/shared-Z1XT7MYX.css
+  h_1305187193789b 1
+assets/writing-BcWgPwlI.js
+  h_1305187193789b 1
+index.html
+  h_1305187193789b 77-79
+writing/index.html
+  h_1305187193789b 29-30,32
+writing/names-can-be-deceiving/index.html
+  h_1305187193789b 30-31,33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "ef1f86f80e41cc851ed923123ed1ec11e43eafc6",
+  "prompts": {},
+  "humans": {
+    "h_1305187193789b": {
+      "author": "Victoria <71730718+rivacoit@users.noreply.github.com>"
+    }
+  }
+}
