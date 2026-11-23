@@ -1062,11 +1062,11 @@ button:focus-visible {
 /* Post pages                                                       */
 /* ---------------------------------------------------------------- */
 
-/* Same page width and left edge as the other pages; only the text column is narrow, for comfortable line length. */
-.post-subtitle,
-.post-body,
+/* Same page width as the other pages. The post itself is a narrow column, centered, for comfortable line length. */
+.post,
 .post-footer {
   max-width: 720px;
+  margin-inline: auto;
 }
 
 .post-nav {
