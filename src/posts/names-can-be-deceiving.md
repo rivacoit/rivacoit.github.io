@@ -26,7 +26,7 @@ echo "running checks"
 echo "uh oh" > ~/bad.txt
 ```
 
-Then I ran an ordinary commit through try. (The doubled quotes are explained in finding 2.)
+Then I ran an ordinary commit through try. (The doubled quotes are explained under smaller things.)
 
 ![try output after git commit. The change list starts with /home/victoriayang/bad.txt (added), above a dozen .git bookkeeping files](/writing/names-can-be-deceiving/git-hook.webp)
 
@@ -36,19 +36,7 @@ try caught the actual effect, listing `bad.txt`. The only issue, potentially, is
 
 Many projects install hooks automatically during `npm install`, and git can be configured to load hooks from a normal folder inside the repo. An agent working in a repo it didn't write can trigger code it never read through them.
 
-## Finding 2: the command you type isn't the command that runs
-
-My first attempt at `find . -name "*.log" -delete` through try failed:
-
-![try find fails with paths must precede expression b.log, the generated script shows the quotes around *.log are gone, and the doubled-quote version deletes a.log, b.log and sub/c.log](/writing/names-can-be-deceiving/find-delete.webp)
-
-But I never typed `b.log`. The second command in the screenshot prints the script try generated, and the quotes around `*.log` are gone.
-
-My shell removed the quotes, as shells do when they pass arguments. try then wrote the command into a script without quoting it again, and a second shell expanded `*.log` into `a.log b.log`. Quoting only protects you against one layer of shell, and here there were two. Adding a second layer of quotes, `"'*.log'"`, fixed it (the last command in the screenshot).
-
-Here, it was an easy fix, but it might be worth being careful when it comes to handling wrappers that re-parse a command.
-
-## Finding 3: the obvious rule blocks a safe command
+## Finding 2: the obvious rule blocks a safe command
 
 The natural rule for an agent might look something like **nothing gets written outside the project folder.** So I ran a harmless `npm install ms`, a tiny package with no dependencies:
 
@@ -58,7 +46,7 @@ npm writes a download cache, an update checker and a log to `~/.npm`, outside th
 
 The easy fix is to allow `~/.npm`, but every allowed folder becomes a trusted place to write. The cache itself is fairly safe, because npm names cached files by their sha512 hash and checks it before use. But an allowed folder still lets one command leave something behind for a later command to use, and try judges each command on its own. Writing "allow `~/.npm` only when the command is `npm`" becomes a name-based rule again.
 
-## Finding 4: what try can't see
+## Finding 3: what try can't see
 
 try records every file a command creates, modifies or deletes. But it cannot record file reads. It also doesn't restrict the network, so a command run through try has the same network access as usual.
 
@@ -85,6 +73,10 @@ The file's contents reached the server. And that's the whole output, no change l
 Write-based rules can't catch exfiltration. That would take a network namespace or tracing system calls.
 
 ## Smaller things
+
+- My first `find . -name "*.log" -delete` through try failed with an error about `b.log`, which I never typed. My shell removed the quotes, as shells do when they pass arguments. try then wrote the command into a script without quoting it again (the second command in the screenshot prints that script), and a second shell expanded `*.log` into `a.log b.log`. Quoting only protects you against one layer of shell, and here there were two. Adding a second layer of quotes, `"'*.log'"`, fixed it. This is a known issue. try's README warns that shell quoting may be unintuitive, and the maintainers [aren't planning to change it](https://github.com/binpash/try/issues/155#issuecomment-2078556237), because re-parsing is what lets `try "echo hi>foo"` keep its redirect.
+
+![try find fails with paths must precede expression b.log, the generated script shows the quotes around *.log are gone, and the doubled-quote version deletes a.log, b.log and sub/c.log](/writing/names-can-be-deceiving/find-delete.webp)
 
 - `rm -rf build/` shows up as one line, `build (deleted)`, no matter how many files were inside. A rule like "never delete `.env` files" has to look in the real folder to see what disappeared.
 
