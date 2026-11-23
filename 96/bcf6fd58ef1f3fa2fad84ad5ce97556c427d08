@@ -1,0 +1,33 @@
+src/index.css
+  s_94909af6903308::t_a1746999bd0749 1037,1044,1046-1050
+  s_94909af6903308::t_d0bea7e2d9d65c 1065-1069
+  s_94909af6903308::t_4ec537918ff310 876,884,886-906,908-1009,1032-1036,1038-1043,1045,1055-1056
+  s_94909af6903308::t_8b8d8c5f09af4f 825-831
+  s_94909af6903308::t_5583c09be33b2f 791-792
+  s_94909af6903308::t_1ae12d3720ecec 907
+  s_94909af6903308::t_00d6d952fbd8e8 789-790,793-800,803-804,836-837,839,856-857,859-860,865,867,874-875,877-879,883,885
+src/posts/index.js
+  s_94909af6903308::t_4ec537918ff310 4,12-13
+src/Writing.jsx
+  s_94909af6903308::t_4ec537918ff310 4-32,51-68
+  s_94909af6903308::t_5583c09be33b2f 46,48
+  s_94909af6903308::t_ac650474f502bc 45,47
+src/posts/names-can-be-deceiving.md
+  s_94909af6903308::t_0f63fc30944814 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "96bcf6fd58ef1f3fa2fad84ad5ce97556c427d08",
+  "prompts": {},
+  "sessions": {
+    "s_94909af6903308": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9e3af717-f961-41e6-b450-0d25dbdafca1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Victoria <71730718+rivacoit@users.noreply.github.com>"
+    }
+  }
+}
