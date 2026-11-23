@@ -1,0 +1,30 @@
+assets/main-CGiMvQeQ.js
+  h_1305187193789b 1
+assets/names-can-be-deceiving-BMigJ4QP.js
+  h_1305187193789b 1-122
+assets/posts-CLlj-c1C.js
+  h_1305187193789b 1
+assets/shared-CvNwdbPV.js
+  h_1305187193789b 1,8-9
+assets/shared-rRqQ5I3O.css
+  h_1305187193789b 1
+assets/writing-C-p_Bkqs.js
+  h_1305187193789b 1
+index.html
+  h_1305187193789b 77-79
+writing/index.html
+  h_1305187193789b 1-37
+writing/names-can-be-deceiving/index.html
+  h_1305187193789b 1-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "49974ae968e712e2e4795bac85c3b0c704197154",
+  "prompts": {},
+  "humans": {
+    "h_1305187193789b": {
+      "author": "Victoria <71730718+rivacoit@users.noreply.github.com>"
+    }
+  }
+}
