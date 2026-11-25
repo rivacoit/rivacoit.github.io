@@ -1,0 +1,19 @@
+src/index.css
+  s_94909af6903308::t_4ea43d1300af8a 1065-1066,1069
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "c8d38e8ef4398f8d4edea74c75984990e8b4252b",
+  "prompts": {},
+  "sessions": {
+    "s_94909af6903308": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9e3af717-f961-41e6-b450-0d25dbdafca1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Victoria <71730718+rivacoit@users.noreply.github.com>"
+    }
+  }
+}
