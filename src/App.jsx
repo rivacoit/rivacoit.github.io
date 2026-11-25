@@ -436,8 +436,8 @@ export default function App() {
             </ul>
           </section>
 
-          <section className="card" id="toolkit">
-            <h2 className="card-title">Toolkit</h2>
+          <section className="card" id="skills">
+            <h2 className="card-title">Skills</h2>
             {TOOLKIT.map((g) => (
               <div key={g.title} className="tool-group">
                 <h3 className="group-label">{g.title}</h3>
